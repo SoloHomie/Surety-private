@@ -1,0 +1,3 @@
+Toast 1.0 Toast.qml
+ToastItem 1.0 ToastItem.qml
+singleton ToastManager 1.0 ToastManager.qml

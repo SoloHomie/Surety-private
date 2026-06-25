@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="qml">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\animations">
+      <UniqueIdentifier>{B2C3D4E5-F6A7-8901-BCDE-F12345678901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\baseComponents">
+      <UniqueIdentifier>{C3D4E5F6-A7B8-9012-CDEF-123456789012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\images">
+      <UniqueIdentifier>{57ee7c9b-9ce3-4dd8-bba7-99723bd5fd44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\layout">
+      <UniqueIdentifier>{D4E5F6A7-B8C9-0123-DEFA-234567890123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\pages">
+      <UniqueIdentifier>{E5F6A7B8-C9D0-1234-EFAB-345678901234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\pages\home">
+      <UniqueIdentifier>{F6A7B8C9-D0E1-2345-FABC-456789012345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\pages\market">
+      <UniqueIdentifier>{A7B8C9D0-E1F2-3456-ABCD-567890123456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\pages\settings">
+      <UniqueIdentifier>{B8C9D0E1-F2A3-4567-BCDE-678901234567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\pages\settings\auth">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\pages\vault">
+      <UniqueIdentifier>{C9D0E1F2-A3B4-5678-CDEF-789012345678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\themes">
+      <UniqueIdentifier>{D0E1F2A3-B4C5-6789-DEFA-890123456789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qml\toast">
+      <UniqueIdentifier>{E1F2A3B4-C5D6-7890-EFAB-901234567890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{F2A3B4C5-D6E7-8901-FABC-012345678901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network">
+      <UniqueIdentifier>{A1B2C3D4-E5F6-7890-NETW-1234567890AB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\service">
+      <UniqueIdentifier>{a94eb5e8-8f48-4963-8131-77181cdcd4bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\model">
+      <UniqueIdentifier>{C1D2E3F4-A5B6-7890-MODL-2345678901CD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\ApiClient.cpp">
+      <Filter>src\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\AuthService.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\AssetService.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\OAuthServer.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model\AssetListModel.cpp">
+      <Filter>src\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model\MarketListModel.cpp">
+      <Filter>src\model</Filter>
+    </ClCompile>
+    <!-- Qt resources -->
+    <QtRcc Include="Resource.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- QML: root -->
+    <None Include="qml\App.qml">
+      <Filter>qml</Filter>
+    </None>
+    <!-- QML: animations -->
+    <None Include="qml\animations\AnimPresets.qml">
+      <Filter>qml\animations</Filter>
+    </None>
+    <!-- QML: baseComponents -->
+    <None Include="qml\baseComponents\Avatar.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\PasswordField.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\ScrollPage.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SectionHeader.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SendCodeButton.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SuretyBtn.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SuretyScrollBar.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SuretySwitch.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SuretyTagSelector.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SuretyTextArea.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\SuretyTextField.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <None Include="qml\baseComponents\Tooltip.qml">
+      <Filter>qml\baseComponents</Filter>
+    </None>
+    <!-- QML: images -->
+    <None Include="qml\images\add_icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\arrow-up.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\call.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\cookie.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\discord.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\eye-closed.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\eye-open.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\github.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\home_icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\list_icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\market_icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\QQ.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\settings_icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\surety-icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\toast-close.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\toast-copy.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\toast-danger.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\toast-info.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\toast-success.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\toast-warning.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\vault_icon.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\window-close.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\window-maximize.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\window-minimize.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\window-restore.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\微信.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\搜索.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\调用.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\礼物.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\窗体-关闭.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\窗体-向下还原.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\窗体-最大化.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\窗体-最小化.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\组管理.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\设置.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <None Include="qml\images\资产.svg">
+      <Filter>qml\images</Filter>
+    </None>
+    <!-- QML: layout -->
+    <None Include="qml\layout\DisplayRect.qml">
+      <Filter>qml\layout</Filter>
+    </None>
+    <None Include="qml\layout\SideBar.qml">
+      <Filter>qml\layout</Filter>
+    </None>
+    <None Include="qml\layout\SideBarDelegate.qml">
+      <Filter>qml\layout</Filter>
+    </None>
+    <!-- QML: pages -->
+    <None Include="qml\pages\HomePage.qml">
+      <Filter>qml\pages</Filter>
+    </None>
+    <None Include="qml\pages\MarketPage.qml">
+      <Filter>qml\pages</Filter>
+    </None>
+    <None Include="qml\pages\SettingsPage.qml">
+      <Filter>qml\pages</Filter>
+    </None>
+    <None Include="qml\pages\VaultPage.qml">
+      <Filter>qml\pages</Filter>
+    </None>
+    <!-- QML: pages/home -->
+    <None Include="qml\pages\home\ActiveItem.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\ActiveItemDetail.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\HeatRanking.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\PreviewCards.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\QuickActionsCard.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\QuickActionsDelegate.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\RankingDelegate.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\StatCard.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <None Include="qml\pages\home\TimelineList.qml">
+      <Filter>qml\pages\home</Filter>
+    </None>
+    <!-- QML: pages/market -->
+    <None Include="qml\pages\market\MarketDetailContent.qml">
+      <Filter>qml\pages\market</Filter>
+    </None>
+    <None Include="qml\pages\market\MarketDetailPopup.qml">
+      <Filter>qml\pages\market</Filter>
+    </None>
+    <None Include="qml\pages\market\MarketItemDelegate.qml">
+      <Filter>qml\pages\market</Filter>
+    </None>
+    <None Include="qml\pages\market\SearchBar.qml">
+      <Filter>qml\pages\market</Filter>
+    </None>
+    <!-- QML: pages/settings -->
+    <None Include="qml\pages\settings\SettingsAbout.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <None Include="qml\pages\settings\SettingsAdvanced.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <None Include="qml\pages\settings\SettingsAppearance.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <None Include="qml\pages\settings\SettingsBeta.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <None Include="qml\pages\settings\LoginSuccess.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <None Include="qml\pages\settings\SettingsGeneral.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <None Include="qml\pages\settings\SettingsNavBar.qml">
+      <Filter>qml\pages\settings</Filter>
+    </None>
+    <!-- QML: pages/settings/auth -->
+    <None Include="qml\pages\settings\auth\LoginForm.qml">
+      <Filter>qml\pages\settings\auth</Filter>
+    </None>
+    <None Include="qml\pages\settings\auth\RegisterForm.qml">
+      <Filter>qml\pages\settings\auth</Filter>
+    </None>
+    <None Include="qml\pages\settings\auth\ResetPasswordForm.qml">
+      <Filter>qml\pages\settings\auth</Filter>
+    </None>
+    <None Include="qml\pages\settings\auth\ThirdPartyLogin.qml">
+      <Filter>qml\pages\settings\auth</Filter>
+    </None>
+    <!-- QML: pages/vault -->
+    <None Include="qml\pages\vault\AssetDetailPanel.qml">
+      <Filter>qml\pages\vault</Filter>
+    </None>
+    <None Include="qml\pages\vault\AssetListDelegate.qml">
+      <Filter>qml\pages\vault</Filter>
+    </None>
+    <None Include="qml\pages\vault\AssetListHeader.qml">
+      <Filter>qml\pages\vault</Filter>
+    </None>
+    <None Include="qml\pages\vault\AssetListPanel.qml">
+      <Filter>qml\pages\vault</Filter>
+    </None>
+    <None Include="qml\pages\vault\ListVaultDelegate.qml">
+      <Filter>qml\pages\vault</Filter>
+    </None>
+    <None Include="qml\pages\vault\ManageDrawer.qml">
+      <Filter>qml\pages\vault</Filter>
+    </None>
+    <!-- QML: themes -->
+    <None Include="qml\themes\Theme.qml">
+      <Filter>qml\themes</Filter>
+    </None>
+    <!-- QML: toast -->
+    <None Include="qml\toast\qmldir">
+      <Filter>qml\toast</Filter>
+    </None>
+    <None Include="qml\toast\Toast.qml">
+      <Filter>qml\toast</Filter>
+    </None>
+    <None Include="qml\toast\ToastItem.qml">
+      <Filter>qml\toast</Filter>
+    </None>
+    <None Include="qml\toast\ToastManager.qml">
+      <Filter>qml\toast</Filter>
+    </None>
+    <None Include="qml\pages\settings\auth\LinkedAccounts.qml">
+      <Filter>qml\pages\settings\auth</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\network\ApiClient.h">
+      <Filter>src\network</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\AuthService.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\AssetService.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\OAuthServer.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\model\AssetListModel.h">
+      <Filter>src\model</Filter>
+    </QtMoc>
+    <QtMoc Include="src\model\MarketListModel.h">
+      <Filter>src\model</Filter>
+    </QtMoc>
+    <!-- Headers: plain include -->
+  </ItemGroup>
+</Project>
