@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
     });
 
     // ── Model → 本地统计自动更新 ──
-    // 用括号防 winsock 的 connect 宏劫持
     (QObject::connect)(assetModel, &AssetListModel::countChanged, api, &ApiClient::updateLocalStats);
     (QObject::connect)(subModel,   &AssetListModel::countChanged, api, &ApiClient::updateLocalStats);
 
