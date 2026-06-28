@@ -87,8 +87,7 @@ signals:
     void subCountChanged();
     void devLogsChanged();
     void oauthLinksChanged();
-    void updateCheckFinished(bool hasUpdate, const QString &latestVersion,
-                              const QString &downloadUrl);
+    void updateCheckFinished(const QVariantMap &info);
 
 private:
     explicit ApiClient(QObject *parent = nullptr);

@@ -90,6 +90,8 @@
         <file>qml/pages/vault/ManageDrawer.qml</file>
         <file>qml/themes/Theme.qml</file>
         <file>qml/themes/qmldir</file>
+        <file>qml/popups/UpdateContent.qml</file>
+        <file>qml/popups/qmldir</file>
         <file>qml/toast/Toast.qml</file>
         <file>qml/toast/ToastItem.qml</file>
         <file>qml/toast/ToastManager.qml</file>

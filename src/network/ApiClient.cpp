@@ -232,9 +232,9 @@ void ApiClient::checkUpdate() {
     get("/api/version", {}, [this](int s, QByteArray r) {
         if (s == 200) {
             QJsonObject o = QJsonDocument::fromJson(r).object();
-            QString serverVer = o["version"].toString();
-            QString currentVer = "1.0.0";
-            // 语义化版本比较
+            QString latest  = o["latest_version"].toString();
+            QString curVer  = "1.0.0"; // 客户端自身版本
+
             auto compareVer = [](const QString &a, const QString &b) -> int {
                 auto al = a.split('.'), bl = b.split('.');
                 for (int i = 0; i < qMax(al.size(), bl.size()); ++i) {
@@ -244,12 +244,17 @@ void ApiClient::checkUpdate() {
                 }
                 return 0;
             };
-            bool hasUpdate = compareVer(serverVer, currentVer) > 0;
-            emit updateCheckFinished(hasUpdate, serverVer,
-                                     o["download_url"].toString());
+
+            QVariantMap info;
+            info["hasUpdate"]   = compareVer(latest, curVer) > 0;
+            info["currentVer"]  = curVer;
+            info["latestVer"]   = latest;
+            info["githubUrl"]   = o["github_url"].toString();
+            info["mirrorUrl"]   = o["mirror_url"].toString();
+            info["changelog"]   = o["changelog"].toString();
+            emit updateCheckFinished(info);
         } else {
-            QString err = s == 0 ? QString::fromUtf8(r) : QString("HTTP %1").arg(s);
-            emit updateCheckFinished(false, "", err);
+            emit updateCheckFinished({});
         }
     });
 }

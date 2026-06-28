@@ -193,6 +193,7 @@
     <None Include="qml\pages\vault\AssetListPanel.qml" />
     <None Include="qml\pages\vault\ListVaultDelegate.qml" />
     <None Include="qml\pages\vault\ManageDrawer.qml" />
+    <None Include="qml\popups\UpdateContent.qml" />
     <None Include="qml\themes\Theme.qml" />
     <None Include="qml\toast\qmldir" />
     <None Include="qml\toast\Toast.qml" />

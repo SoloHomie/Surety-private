@@ -5,6 +5,7 @@ import Surety 1.0
 import "layout"
 import "toast"
 import "themes"
+import "popups"
 
 Window {
     id: window
@@ -35,14 +36,17 @@ Window {
         }
     }
 
-    // 更新检查结果 ── 有新版弹 popup
+    // 更新检查结果 ── 传递真实数据给弹窗
     Connections {
         target: Api
-        function onUpdateCheckFinished(hasUpdate, latest, url) {
-            if (hasUpdate) {
-                updatePopup.latestVer = latest
-                updatePopup.downloadUrl = url
-                updatePopup.open()
+        function onUpdateCheckFinished(info) {
+            if (info && info.hasUpdate) {
+                updateContent.currentVer = info.currentVer || ""
+                updateContent.latestVer = info.latestVer || ""
+                updateContent.releaseNotes = info.changelog || ""
+                updateContent.githubUrl = info.githubUrl || ""
+                updateContent.mirrorUrl = info.mirrorUrl || ""
+                updateDialog.open()
             }
         }
     }
@@ -149,113 +153,29 @@ Window {
 
         ToastContainer { id: toastHost }
 
-        // ── 更新通知 Popup ──
-        Popup {
-            id: updatePopup
-            x: mainRect.width - width - 32
-            y: 32
-            width: 380
-            padding: 24
+        // ── 更新通知弹窗 ──
+        Dialog {
+            id: updateDialog
+            modal: true
             closePolicy: Popup.CloseOnEscape
-            modal: false
+            standardButtons: Dialog.NoButton
+            width: 650
+            height: 880
+            x: (window.width  - width)  / 2
+            y: (window.height - height) / 2
+            padding: 0
 
-            property string latestVer: ""
-            property string downloadUrl: ""
+            background: Rectangle { color: "transparent" }
 
-            background: Rectangle {
-                color: "#161b22"
-                radius: 12
-                border.width: 1; border.color: "#30363d"
+            Overlay.modal: Rectangle {
+                color: "#0d1117"
+                opacity: 0.85
+                Behavior on opacity { NumberAnimation { duration: 200 } }
             }
 
-            ColumnLayout {
-                anchors.fill: parent
-                spacing: 0
-
-                // 标题行
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.bottomMargin: 12
-
-                    Rectangle {
-                        width: 8; height: 8; radius: 4; color: "#d29922"
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-                    Text {
-                        Layout.fillWidth: true
-                        text: "发现新版本"
-                        color: "#e6edf3"
-                        font.pixelSize: 16; font.weight: Font.Bold
-                        font.family: "Microsoft YaHei UI"
-                    }
-                    Text {
-                        text: "×"
-                        color: "#8b949e"; font.pixelSize: 18
-                        font.family: "Microsoft YaHei UI"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: updatePopup.close()
-                        }
-                    }
-                }
-
-                Text {
-                    Layout.fillWidth: true
-                    Layout.bottomMargin: 16
-                    text: "Surety v" + updatePopup.latestVer + " 已发布。\n建议更新以获得最新功能和安全修复。"
-                    color: "#8b949e"
-                    font.pixelSize: 13; lineHeight: 1.5
-                    font.family: "Microsoft YaHei UI"
-                    wrapMode: Text.WordWrap
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 10
-
-                    Item { Layout.fillWidth: true }
-
-                    Rectangle {
-                        height: 32; width: dismissText.implicitWidth + 24; radius: 6
-                        color: "#21262d"
-                        Text {
-                            id: dismissText
-                            anchors.centerIn: parent
-                            text: "稍后提醒"
-                            color: "#8b949e"
-                            font.pixelSize: 13; font.family: "Microsoft YaHei UI"
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: updatePopup.close()
-                        }
-                    }
-
-                    Rectangle {
-                        height: 32; width: downloadText.implicitWidth + 24; radius: 6
-                        color: "#1f6feb"
-                        Text {
-                            id: downloadText
-                            anchors.centerIn: parent
-                            text: "前往下载"
-                            color: "#ffffff"
-                            font.pixelSize: 13; font.weight: Font.Bold
-                            font.family: "Microsoft YaHei UI"
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                if (updatePopup.downloadUrl !== "")
-                                    Qt.openUrlExternally(updatePopup.downloadUrl)
-                                updatePopup.close()
-                            }
-                        }
-                    }
-                }
+            UpdateContent {
+                id: updateContent
+                onDismissClicked: updateDialog.close()
             }
         }
     }
