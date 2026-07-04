@@ -12,7 +12,7 @@ Rectangle {
     property string latestVer: "1.0.0"
     property string releaseNotes: ""
     property string githubUrl: "https://github.com/SoloHomie/Surety/releases/latest"
-    property string mirrorUrl: "https://ghproxy.com/https://github.com/SoloHomie/Surety/releases/latest"
+    property string downloadUrl: ""
     property bool forceUpdate: false
 
     implicitWidth: 650
@@ -116,55 +116,74 @@ Rectangle {
             }
         }
 
+        // 进度条
+        Rectangle {
+            Layout.fillWidth: true; Layout.preferredHeight: 6
+            Layout.bottomMargin: 16; radius: 3
+            color: Theme.bg_input; visible: Updater.downloading()
+            Rectangle {
+                height: 6; radius: 3; color: Theme.accent
+                width: parent.width * Updater.progress() / 100
+                Behavior on width { NumberAnimation { duration: 200 } }
+            }
+        }
+
         Text {
-            Layout.fillWidth: true; Layout.bottomMargin: 12
+            Layout.fillWidth: true; Layout.bottomMargin: 8
             text: qsTr("下载方式")
             color: Theme.text_primary; font.pixelSize: 16; font.weight: Font.DemiBold
             font.family: "Microsoft YaHei UI"
+        }
+
+        // 自动更新按钮 (主)
+        Rectangle {
+            Layout.fillWidth: true; Layout.preferredHeight: 52
+            Layout.bottomMargin: 8; radius: 10
+            color: autoMa.containsMouse ? Theme.accent_hover : Theme.accent
+            border.width: 0; enabled: !Updater.downloading() && root.downloadUrl !== ""
+            opacity: enabled ? 1.0 : 0.5
+            Behavior on color { ColorAnimation { duration: 150 } }
+            Text { anchors.centerIn: parent
+                text: Updater.downloading() ? qsTr("下载中 ") + Updater.progress() + "%"
+                      : qsTr("自动更新（推荐）")
+                color: "#fff"; font.pixelSize: 17; font.weight: Font.DemiBold
+                font.family: "Microsoft YaHei UI" }
+            MouseArea { id: autoMa; anchors.fill: parent; hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Updater.downloadAndInstall(root.downloadUrl, root.latestVer) }
         }
 
         RowLayout {
             Layout.fillWidth: true; spacing: 12
 
             Rectangle {
-                Layout.fillWidth: true; Layout.preferredHeight: 52
-                radius: 10
+                Layout.fillWidth: true; Layout.preferredHeight: 44; radius: 10
+                color: serverMa.containsMouse ? Theme.hover_bg : Theme.bg_page
+                border.width: 1
+                border.color: serverMa.containsMouse ? Theme.border_standard : Theme.border_default
+                enabled: root.downloadUrl !== ""
+                opacity: enabled ? 1.0 : 0.5
+                Behavior on color { ColorAnimation { duration: 150 } }
+                Behavior on border.color { ColorAnimation { duration: 150 } }
+                Text { anchors.centerIn: parent; text: qsTr("服务器下载"); color: Theme.text_primary
+                    font.pixelSize: 16; font.family: "Microsoft YaHei UI" }
+                MouseArea { id: serverMa; anchors.fill: parent; hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Qt.openUrlExternally(root.downloadUrl) }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true; Layout.preferredHeight: 44; radius: 10
                 color: ghMa.containsMouse ? Theme.hover_bg : Theme.bg_page
                 border.width: 1
                 border.color: ghMa.containsMouse ? Theme.border_standard : Theme.border_default
-
                 Behavior on color { ColorAnimation { duration: 150 } }
                 Behavior on border.color { ColorAnimation { duration: 150 } }
-
-                Text { anchors.centerIn: parent; text: "GitHub"; color: Theme.text_primary; font.pixelSize: 17; font.family: "JetBrains Mono" }
-                MouseArea { id: ghMa; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: Qt.openUrlExternally(root.githubUrl) }
-            }
-
-            Rectangle {
-                Layout.fillWidth: true; Layout.preferredHeight: 52
-                radius: 10
-                color: mirrorMa.containsMouse ? Theme.hover_bg : Theme.bg_page
-                border.width: 1
-                border.color: mirrorMa.containsMouse ? Theme.border_standard : Theme.border_default
-
-                Behavior on color { ColorAnimation { duration: 150 } }
-                Behavior on border.color { ColorAnimation { duration: 150 } }
-
-                Text { anchors.centerIn: parent; text: "Proxy"; color: Theme.text_primary; font.pixelSize: 17; font.family: "Microsoft YaHei UI" }
-                MouseArea { id: mirrorMa; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: Qt.openUrlExternally(root.mirrorUrl) }
-            }
-            Rectangle {
-                Layout.fillWidth: true; Layout.preferredHeight: 52
-                radius: 10
-                color: serviceMa.containsMouse ? Theme.hover_bg : Theme.bg_page
-                border.width: 1
-                border.color: serviceMa.containsMouse ? Theme.border_standard : Theme.border_default
-
-                Behavior on color { ColorAnimation { duration: 150 } }
-                Behavior on border.color { ColorAnimation { duration: 150 } }
-
-                Text { anchors.centerIn: parent; text: "Discord"; color: Theme.text_primary; font.pixelSize: 17; font.family: "Microsoft YaHei UI" }
-                MouseArea { id: serviceMa; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: Qt.openUrlExternally(root.mirrorUrl) }
+                Text { anchors.centerIn: parent; text: "GitHub"; color: Theme.text_primary
+                    font.pixelSize: 16; font.family: "JetBrains Mono" }
+                MouseArea { id: ghMa; anchors.fill: parent; hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Updater.openGitHub(root.githubUrl) }
             }
         }
 

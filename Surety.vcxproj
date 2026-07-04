@@ -109,6 +109,7 @@
     <ClCompile Include="src\services\wallet\CryptoHelper.cpp" />
     <ClCompile Include="src\services\wallet\SubscriptionStore.cpp" />
     <ClCompile Include="src\services\system\LanguageManager.cpp" />
+    <ClCompile Include="src\services\system\UpdateService.cpp" />
     <ClCompile Include="src\model\AssetListModel.cpp" />
     <ClCompile Include="src\model\MarketListModel.cpp" />
   </ItemGroup>

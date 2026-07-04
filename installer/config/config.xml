@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Surety</Name>
+    <Version>1.0.0</Version>
+    <Title>Surety 安装向导</Title>
+    <Publisher>Homie</Publisher>
+    <ProductUrl>https://github.com/SoloHomie/Surety</ProductUrl>
+    <InstallerWindowIcon>installericon</InstallerWindowIcon>
+    <InstallerApplicationIcon>installericon</InstallerApplicationIcon>
+
+    <StartMenuDir>Surety</StartMenuDir>
+    <TargetDir>@HomeDir@/Surety</TargetDir>
+
+    <!-- 使用 QML 界面 -->
+    <RemoteRepositories>
+        <Repository>
+            <Url>https://api.solohomie.top/repo</Url>
+        </Repository>
+    </RemoteRepositories>
+
+    <!-- 自定义 UI -->
+    <ControlScript>installer.qs</ControlScript>
+
+    <!-- 许可页面跳过（可选） -->
+    <Licenses>
+        <License name="MIT" file="LICENSE.txt"/>
+    </Licenses>
+</Installer>

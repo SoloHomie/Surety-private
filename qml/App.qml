@@ -54,7 +54,7 @@ Window {
                 updateContent.latestVer = info.latestVer || ""
                 updateContent.releaseNotes = info.changelog || ""
                 updateContent.githubUrl = info.githubUrl || ""
-                updateContent.mirrorUrl = info.mirrorUrl || ""
+                updateContent.downloadUrl = info.downloadUrl || ""
                 updateContent.forceUpdate = info.forceUpdate || false
                 updateDialog.open()
             }
@@ -68,6 +68,30 @@ Window {
         ToastManager.target = toastHost
         if (Api.isLoggedIn) ToastManager.add(qsTr("已自动登录"), "success", qsTr("欢迎回来"), 3000)
         if (Qt.application.arguments.indexOf("--tray") >= 0) window.hide()
+
+        // Update callbacks
+        Updater.onDownloadingChanged = function() {
+            if (Updater.downloading()) { updateDialog.close(); updaterLoader.active = true }
+        }
+        Updater.onProgressChanged = function() {
+            if (updaterLoader.item) updaterLoader.item.progress = Updater.progress()
+        }
+        Updater.onInstallReady = function() {
+            if (updaterLoader.item) {
+                updaterLoader.item.progress = 100
+                updaterLoader.item.installing = true
+                updaterLoader.item.version = updateContent.latestVer
+            }
+            Qt.callLater(function() {
+                ToastManager.add(qsTr("更新已下载，即将重启"), "success", "", 3000)
+                updateDialog.close()
+                Qt.quit()
+            })
+        }
+        Updater.onErrorOccurred = function(msg) {
+            updaterLoader.active = false
+            ToastManager.add(msg, "warning", "", 3500)
+        }
     }
 
     component ToastContainer: Item {
@@ -186,6 +210,13 @@ Window {
                 id: updateContent
                 onDismissClicked: updateDialog.close()
             }
+        }
+
+        // ── 更新进度窗口 ──
+        Loader {
+            id: updaterLoader
+            source: "dialogs/UpdaterWindow.qml"
+            active: false
         }
     }
 

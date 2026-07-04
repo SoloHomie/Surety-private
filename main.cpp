@@ -16,6 +16,7 @@
 #include "src/services/system/FileHelper.h"
 #include "src/services/wallet/CryptoHelper.h"
 #include "src/services/wallet/SubscriptionStore.h"
+#include "src/services/system/UpdateService.h"
 #include "src/services/system/LanguageManager.h"
 #include "src/model/AssetListModel.h"
 #include "src/model/MarketListModel.h"
@@ -103,6 +104,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SubStore", SubscriptionStore::instance());
     LanguageManager::instance()->setEngine(&engine);
     engine.rootContext()->setContextProperty("Lang", LanguageManager::instance());
+    engine.rootContext()->setContextProperty("Updater", UpdateService::instance());
 
     engine.rootContext()->setContextProperty("OAuthServer", oauthServer);
     engine.rootContext()->setContextProperty("AssetModel", assetModel);
