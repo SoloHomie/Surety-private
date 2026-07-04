@@ -74,10 +74,11 @@ Rectangle {
 
             MouseArea {
                 id: giftBtn; anchors.fill: parent; hoverEnabled: true
-                cursorShape: (giftClaimed || !Api.isLoggedIn) ? Qt.ArrowCursor : Qt.PointingHandCursor
+                cursorShape: (giftClaimed || giftLoading || !Api.isLoggedIn) ? Qt.ArrowCursor : Qt.PointingHandCursor
                 onClicked: {
-                    if (giftClaimed) return
+                    if (giftClaimed || giftLoading) return
                     if (!Api.isLoggedIn) { ToastManager.add(qsTr("登录后可以领取新人福利哦"), "info", "", 2500); return }
+                    giftLoading = true
                     Api.claimBenefit()
                 }
             }
@@ -85,6 +86,7 @@ Rectangle {
     }
 
     property bool giftClaimed: false
+    property bool giftLoading: false
     property string giftTooltip: ""
 
     Connections {
@@ -94,6 +96,7 @@ Rectangle {
             if (list.length > 0) giftTooltip = list[0].description || ""
         }
         function onBenefitClaimed(ok, msg) {
+            giftLoading = false
             if (ok) { giftClaimed = true; Api.fetchBalance(); Api.fetchTransactions(); ToastManager.add(msg, "success", qsTr("领取成功"), 3000) }
             else ToastManager.add(msg, "warning", "", 2500)
         }

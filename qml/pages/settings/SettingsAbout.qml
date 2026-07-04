@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
 import "../../baseComponents"
+import "../../toast"
 
 Item {
     id: root
@@ -11,15 +12,20 @@ Item {
     Connections {
         target: Api
         function onUpdateCheckFinished(info) {
+            var wasManual = checkingUpdate
+            checkingUpdate = false
             if (info && info.hasUpdate) {
                 updateBadge.visible = true
                 updateBadgeText.text = "v" + info.latestVer + " " + qsTr("可用")
                 root._downloadUrl = info.githubUrl || ""
+            } else if (wasManual && info && !info.hasUpdate) {
+                ToastManager.add(qsTr("已是最新版本"), "info", "", 2000)
             }
         }
     }
 
     property string _downloadUrl: ""
+    property bool checkingUpdate: false
 
     ColumnLayout {
         anchors.centerIn: parent
@@ -96,11 +102,16 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: 28
             Layout.preferredHeight: 36
-            text: qsTr("检查更新")
+            text: checkingUpdate ? qsTr("检查中...") : qsTr("检查更新")
             variant: "outline"
+            enabled: !checkingUpdate
             font.pixelSize: 15
             font.family: "Microsoft YaHei UI"
-            onClicked: Api.checkUpdate()
+            onClicked: {
+                checkingUpdate = true
+                updateBadge.visible = false
+                Api.checkUpdate()
+            }
         }
 
        
