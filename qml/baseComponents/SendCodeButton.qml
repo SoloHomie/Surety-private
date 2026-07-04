@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 
 Rectangle {
     id: root
@@ -12,18 +13,18 @@ Rectangle {
     readonly property bool _disabled: countdown > 0 || sending
 
     color: {
-        if (_disabled) return "#21262d"
-        if (btnHover.containsMouse) return "#388bfd"
-        return "#1f6feb"
+        if (_disabled) return Theme.border_default
+        if (btnHover.containsMouse) return Theme.accent_hover
+        return Theme.accent
     }
     border.width: 1
-    border.color: _disabled ? "#30363d" : "transparent"
+    border.color: _disabled ? Theme.border_standard : "transparent"
     Behavior on color { ColorAnimation { duration: 150 } }
 
     Text {
         anchors.centerIn: parent
         text: sending ? "发送中..." : (countdown > 0 ? countdown + "s 后重发" : "发送验证码")
-        color: _disabled ? "#484f58" : "#ffffff"
+        color: _disabled ? Theme.text_disabled : Theme.text_bright
         font.pixelSize: 13; font.weight: Font.DemiBold
         font.family: "Microsoft YaHei UI"
     }

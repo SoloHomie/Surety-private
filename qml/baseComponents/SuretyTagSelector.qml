@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Layouts
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -34,15 +35,15 @@ Item {
 
     // ── 数据 ──
     property var   model: [
-        { label: "选项A", code: "#1f6feb" },
-        { label: "选项B", code: "#238636" },
-        { label: "选项C", code: "#d29922" }
+        { label: "选项A", code: Theme.accent },
+        { label: "选项B", code: Theme.success },
+        { label: "选项C", code: Theme.warning_fg }
     ]
     property int   selectedIndex: 0
 
     // ── 通用外观 ──
-    property color selectedTextColor:  "#ffffff"
-    property color textColor:          "#8b949e"
+    property color selectedTextColor:  Theme.text_bright
+    property color textColor:          Theme.text_secondary
     property string fontFamily:       "Microsoft YaHei UI"
     property int   fontSize:           15
     property bool  enabled:            true
@@ -50,8 +51,8 @@ Item {
 
     // ── tag 模式外观 ──
     property var   selectedColor:      undefined   // undefined → 使用 model.code
-    property color borderColor:        "#30363d"
-    property color hoverOverlayColor:  "#ffffff"
+    property color borderColor:        Theme.border_standard
+    property color hoverOverlayColor:  Theme.text_bright
     property real  hoverOverlayOpacity: 0.05
     property real  glowOpacity:        0.35
     property int   tagHeight:          42
@@ -64,9 +65,9 @@ Item {
     property int   segmentPadding:     5
     property int   segmentSpacing:     4
     property int   segmentRadius:      8
-    property color segmentBg:          "#161b22"
-    property color segmentBorderColor: "#30363d"
-    property color segmentSelColor:    "#1f6feb"
+    property color segmentBg:          Theme.bg_card
+    property color segmentBorderColor: Theme.border_standard
+    property color segmentSelColor:    Theme.accent
 
     // ── Layout 尺寸汇报 ──
     Layout.minimumWidth:  root.minimumWidth
@@ -146,8 +147,8 @@ Item {
                 readonly property color _selBg: root.selectedColor !== undefined ? root.selectedColor : _code
 
                 color: _sel ? _selBg : "transparent"
-                border.width: _sel ? 0 : 1
-                border.color: _sel ? "transparent" : root.borderColor
+                border.width: _sel ? 2 : 1
+                border.color: _sel ? _selBg : root.borderColor
 
                 Behavior on color       { ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
                 Behavior on border.color { ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
@@ -212,7 +213,7 @@ Item {
     function _getCode(md, m) {
         if (md && md.code !== undefined) return md.code
         if (m  && m.code  !== undefined) return m.code
-        return "#1f6feb"
+        return Theme.accent
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -222,9 +223,9 @@ Item {
         property int   segmentRadius:  6
         property string segmentLabel:  ""
         property bool   segmentSelected: false
-        property color  segmentSelColor: "#1f6feb"
-        property color  selectedTextColor: "#ffffff"
-        property color  textColor:    "#8b949e"
+        property color  segmentSelColor: Theme.accent
+        property color  selectedTextColor: Theme.text_bright
+        property color  textColor:    Theme.text_secondary
         property string fontFamily:   "Microsoft YaHei UI"
         property int   fontSize:      15
 

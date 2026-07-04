@@ -28,7 +28,7 @@ void AssetListModel::loadFromJson(const QString &json, bool isSub) {
         QVariantMap m;
         m["name"]=o["asset_name"].toString();
         m["type"]=o["asset_type"].toString("other");
-        m["code"]="#1f6feb";
+        m["code"]="#58a6ff";
         m["version"]=o["version"].toString("1.0");
         m["author"]="";
         m["hasSubscription"]=isSub;
@@ -38,6 +38,9 @@ void AssetListModel::loadFromJson(const QString &json, bool isSub) {
         else
             m["assetId"] = QString::number((qint64)o["asset_id"].toDouble(), 'f', 0);
         m["desc"]=o["description"].toString();
+        m["once_price"]        = o["once_price"].toDouble();
+        m["sub_price"]         = o["sub_price"].toDouble();
+        m["sub_duration_days"] = o["sub_duration_days"].toInt(30);
         m["quick"]=o["quick"].toBool(false);   // 服务端返回的上架状态
         m["props"]=QString::fromUtf8(QJsonDocument(o["properties"].toObject()).toJson(QJsonDocument::Compact));
         m_data.append(m);

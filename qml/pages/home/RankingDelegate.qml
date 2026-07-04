@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 
 Rectangle {
     id: root
@@ -36,9 +37,9 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         color: {
             if (root.rank === 1) return "#C89B3C"
-            if (root.rank === 2) return "#8b949e"
+            if (root.rank === 2) return Theme.text_secondary
             if (root.rank === 3) return "#c6905b"
-            return "#484f58"
+            return Theme.text_disabled
         }
     }
 
@@ -49,7 +50,7 @@ Rectangle {
         anchors.rightMargin: 14
         anchors.verticalCenter: parent.verticalCenter
         text: root.callCount
-        color: "#8b949e"
+        color: Theme.text_secondary
         font.pixelSize: 16
         font.family: "JetBrains Mono"
     }
@@ -64,21 +65,13 @@ Rectangle {
         height: 20
         radius: 3
 
-        readonly property string _t: root.assetType
-        color: {
-            if (_t === "知识包") return "#C89B3C"
-            if (_t === "脚本")   return "#34D399"
-            if (_t === "模型")   return "#58A6FF"
-            if (_t === "工具")   return "#A371F7"
-            if (_t === "工作流") return "#F59E0B"
-            return "#484f58"
-        }
+        color: Theme.tag_preset_bg
 
         Text {
             id: typeLabel
             anchors.centerIn: parent
             text: root.assetType
-            color: "#0d1117"
+            color: "#58A6FF"
             font.pixelSize: 14
             font.weight: Font.Bold
             font.family: "JetBrains Mono"
@@ -94,7 +87,7 @@ Rectangle {
         anchors.rightMargin: 8
         anchors.verticalCenter: parent.verticalCenter
         text: root.assetName
-        color: nameMouse.containsMouse ? "#58a6ff" : "#e6edf3"
+        color: nameMouse.containsMouse ? Theme.accent_text : Theme.text_primary
         font.pixelSize: 18
         font.underline: false
         font.family: "Microsoft YaHei UI"

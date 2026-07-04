@@ -5,7 +5,7 @@ import Surety 1.0
 import "layout"
 import "toast"
 import "themes"
-import "popups"
+import "dialogs"
 
 Window {
     id: window
@@ -17,6 +17,15 @@ Window {
     visible: true
     color: Theme.bg_input
     title: "Surety"
+
+    // ── 系统托盘 ──
+    onClosing: function(close) { close.accepted = false; window.hide() }
+    Connections {
+        target: SystemTray
+        function onTrayActivated() {
+            if (window.visible) window.hide(); else window.show()
+        }
+    }
 
     // OAuth 回调 → C++ 保存令牌
     Connections {
@@ -36,7 +45,7 @@ Window {
         }
     }
 
-    // 更新检查结果 ── 传递真实数据给弹窗
+    // 更新检查结果
     Connections {
         target: Api
         function onUpdateCheckFinished(info) {
@@ -46,18 +55,19 @@ Window {
                 updateContent.releaseNotes = info.changelog || ""
                 updateContent.githubUrl = info.githubUrl || ""
                 updateContent.mirrorUrl = info.mirrorUrl || ""
+                updateContent.forceUpdate = info.forceUpdate || false
                 updateDialog.open()
             }
         }
     }
 
     Component.onCompleted: {
-        mainRect.scale = 0.96
-        mainRect.opacity = 0
-        mainRect.scale = 1.0
-        mainRect.opacity = 1.0
+        SystemTray.init(window)
+        mainRect.scale = 0.96; mainRect.opacity = 0
+        mainRect.scale = 1.0; mainRect.opacity = 1.0
         ToastManager.target = toastHost
-        if (Api.isLoggedIn) ToastManager.add("自动登录成功", "success", "欢迎回来", 3000)
+        if (Api.isLoggedIn) ToastManager.add(qsTr("已自动登录"), "success", qsTr("欢迎回来"), 3000)
+        if (Qt.application.arguments.indexOf("--tray") >= 0) window.hide()
     }
 
     component ToastContainer: Item {
@@ -154,11 +164,10 @@ Window {
         ToastContainer { id: toastHost }
 
         // ── 更新通知弹窗 ──
-        Dialog {
+        Popup {
             id: updateDialog
             modal: true
-            closePolicy: Popup.CloseOnEscape
-            standardButtons: Dialog.NoButton
+            closePolicy: updateContent.forceUpdate ? Popup.NoAutoClose : Popup.CloseOnEscape
             width: 650
             height: 880
             x: (window.width  - width)  / 2
@@ -168,7 +177,7 @@ Window {
             background: Rectangle { color: "transparent" }
 
             Overlay.modal: Rectangle {
-                color: "#0d1117"
+                color: Theme.bg_page
                 opacity: 0.85
                 Behavior on opacity { NumberAnimation { duration: 200 } }
             }

@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
@@ -12,7 +13,7 @@ Item {
         function onUpdateCheckFinished(info) {
             if (info && info.hasUpdate) {
                 updateBadge.visible = true
-                updateBadgeText.text = "v" + info.latestVer + " 可用"
+                updateBadgeText.text = "v" + info.latestVer + " " + qsTr("可用")
                 root._downloadUrl = info.githubUrl || ""
             }
         }
@@ -36,7 +37,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: 4
             text: "Surety"
-            color: "#e6edf3"
+            color: Theme.text_primary
             font.pixelSize: 28
             font.weight: Font.Bold
             font.family: "Microsoft YaHei UI"
@@ -48,8 +49,8 @@ Item {
             spacing: 8
 
             Text {
-                text: "版本 1.0.0"
-                color: "#6e7681"
+                text: qsTr("版本") + " 1.0.0"
+                color: Theme.text_hint
                 font.pixelSize: 16
                 font.family: "JetBrains Mono"
 
@@ -66,14 +67,14 @@ Item {
                 visible: false
                 radius: 4; height: 22
                 width: updateBadgeText.implicitWidth + 14
-                color: "#1a2332"
-                border.color: "#1f6feb"
+                color: Theme.selected_bg
+                border.color: Theme.accent
                 border.width: 1
 
                 Text {
                     id: updateBadgeText
                     anchors.centerIn: parent
-                    color: "#58a6ff"
+                    color: Theme.accent_text
                     font.pixelSize: 13
                     font.weight: Font.Bold
                     font.family: "Microsoft YaHei UI"
@@ -95,19 +96,20 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: 28
             Layout.preferredHeight: 36
-            text: "检查更新"
+            text: qsTr("检查更新")
             variant: "outline"
             font.pixelSize: 15
             font.family: "Microsoft YaHei UI"
             onClicked: Api.checkUpdate()
         }
 
+       
         Rectangle {
             Layout.preferredWidth: 300
             Layout.preferredHeight: 1
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: 28
-            color: "#21262d"
+            color: Theme.border_default
         }
 
         ColumnLayout {
@@ -117,8 +119,8 @@ Item {
 
             RowLayout {
                 spacing: 32
-                Text { Layout.preferredWidth: 64; text: "开发者"; color: "#8b949e"; font.pixelSize: 15; font.family: "Microsoft YaHei UI" }
-                Text { text: "Homie"; color: "#e6edf3"; font.pixelSize: 15; font.family: "Microsoft YaHei UI" }
+                Text { text: qsTr("开发者"); color: Theme.text_secondary; font.pixelSize: 15; font.family: "Microsoft YaHei UI" }
+                Text { text: "Homie"; color: Theme.text_primary; font.pixelSize: 15; font.family: "Microsoft YaHei UI" }
             }
         }
 

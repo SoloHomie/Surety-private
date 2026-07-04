@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 
 // 通用搜索栏 — pill-shaped, GitHub Primer Dark 风格
@@ -27,8 +28,8 @@ Rectangle {
     readonly property bool _hovered: barHoverArea.containsMouse && !searchInput.activeFocus
     readonly property bool _focused: searchInput.activeFocus
 
-    color: _focused ? "#0d1117" : (_hovered ? "#060d15" : "#010409")
-    border.color: _focused ? "#1f6feb" : (_hovered ? "#30363d" : "#21262d")
+    color: _focused ? Theme.bg_page : (_hovered ? "#060d15" : Theme.bg_input)
+    border.color: _focused ? Theme.accent : (_hovered ? Theme.border_standard : Theme.border_default)
 
     Behavior on color {
         ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -44,7 +45,7 @@ Rectangle {
         radius: parent.radius + 2
         color: "transparent"
         border.width: 2
-        border.color: "#1f6feb"
+        border.color: Theme.accent
         opacity: root._focused ? 0.25 : 0.0
         visible: opacity > 0.0
         Behavior on opacity {
@@ -75,15 +76,15 @@ Rectangle {
         anchors.leftMargin: 12
         anchors.rightMargin: 8
         height: parent.height
-        color: "#e6edf3"
+        color: Theme.text_primary
         font.pixelSize: 18
         font.family: "JetBrains Mono"
         verticalAlignment: TextInput.AlignVCenter
         clip: true
         selectByMouse: true
         activeFocusOnPress: true
-        selectionColor: "#1f6feb"
-        selectedTextColor: "#ffffff"
+        selectionColor: Theme.accent
+        selectedTextColor: Theme.text_bright
 
         onTextChanged: root.searchTextChanged(text)
 
@@ -101,7 +102,7 @@ Rectangle {
         anchors.fill: searchInput
         verticalAlignment: Text.AlignVCenter
         text: "Search assets, knowledge packs..."
-        color: root._focused ? "#6e7681" : "#484f58"
+        color: root._focused ? Theme.text_hint : Theme.text_disabled
         font.pixelSize: 18
         font.family: "JetBrains Mono"
         elide: Text.ElideRight

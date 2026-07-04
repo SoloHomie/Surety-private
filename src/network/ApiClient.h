@@ -12,6 +12,7 @@
 using ApiCallback = std::function<void(int, QByteArray)>;
 
 class AssetListModel;
+class MarketListModel;
 
 // 全局 HTTP 客户端 + 认证状态 + 本地统计
 class ApiClient : public QObject {
@@ -73,9 +74,38 @@ public:
     /// 检查更新
     Q_INVOKABLE void checkUpdate();
 
+    /// 拉取 Marketplace 上架商品列表
+    Q_INVOKABLE void fetchListings(const QString &type = "",
+                                    const QString &search = "",
+                                    int page = 0);
+    /// 拉取单个 listing 最新数据（购买前验价用）
+    Q_INVOKABLE void fetchListingDetail(const QString &listingId,
+                                         const QVariantMap &cached);
+    /// 设置关联的 MarketListModel（由 main.cpp 注入）
+    void setMarketModel(MarketListModel *m) { m_marketModel = m; }
+
     /// 快速上架/下架 — 成功后更新 model 的 quick 字段
     Q_INVOKABLE void quickListAsset(const QString &assetId);
     Q_INVOKABLE void quickUnlistAsset(const QString &assetId);
+
+    /// 订阅市场资产
+    Q_INVOKABLE void subscribe(const QString &listingId);
+
+    /// 热榜（按订阅数排序）
+    Q_INVOKABLE void fetchHotListings(int limit = 10);
+
+    /// 福利系统
+    Q_INVOKABLE void claimBenefit(const QString &benefitType = "welcome");
+    Q_INVOKABLE void checkBenefits();
+    Q_INVOKABLE void fetchBenefits();
+
+    /// 余额
+    Q_INVOKABLE void fetchBalance();
+    Q_PROPERTY(quint64 suretyBalance READ suretyBalance NOTIFY suretyBalanceChanged)
+    quint64 suretyBalance() const { return m_balance; }
+
+    /// 交易记录
+    Q_INVOKABLE void fetchTransactions(const QString &type = "", int page = 0);
 
     QVariantList devLogs() const { return m_devLogs; }
 
@@ -88,19 +118,29 @@ signals:
     void devLogsChanged();
     void oauthLinksChanged();
     void updateCheckFinished(const QVariantMap &info);
+    void listingDetailFetched(const QVariantMap &latest, const QVariantMap &cached);
+    void subscribeFinished(bool ok, const QString &message);
+    void hotListingsReady(const QVariantList &listings);
+    void benefitClaimed(bool ok, const QString &message);
+    void benefitsChecked(const QStringList &claimedTypes);
+    void benefitsReady(const QVariantList &benefits);
+    void suretyBalanceChanged();
+    void transactionsReady(const QVariantList &list);
 
 private:
     explicit ApiClient(QObject *parent = nullptr);
     void setupRequest(QNetworkRequest &req);
 
     QNetworkAccessManager m_nam;
-    QString m_baseUrl = "http://localhost:8920";
+    QString m_baseUrl;
     QString m_accessToken, m_refreshToken, m_uid, m_email, m_username, m_avatarUrl, m_provider;
 
     int m_assetCount = 0, m_listedCount = 0, m_subCount = 0;
+    quint64 m_balance = 0;
     QVariantList m_devLogs;
     QVariantList m_oauthLinks;
 
     AssetListModel *m_assetModel = nullptr;
     AssetListModel *m_subModel   = nullptr;
+    MarketListModel *m_marketModel = nullptr;
 };

@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
@@ -22,26 +23,27 @@ ScrollPage {
         function onLoginResult(ok, msg) {
             loginForm.loading = false
             if (ok) {
-                ToastManager.add("登录成功", "success", "欢迎回来", 3000)
+                loginForm.clear()
+                ToastManager.add(qsTr("欢迎回来！"), "success", qsTr("登录成功"), 3000)
                 Api.fetchStats()
                 stack.currentIndex = 4
             }
-            else ToastManager.add(msg || "登录失败", "error", "登录失败", 3000)
+            else ToastManager.add(msg || qsTr("登录失败"), "error", qsTr("登录失败"), 3000)
         }
         function onRegisterResult(ok, msg) {
             registerForm.loading = false
-            if (ok) { registerForm.reset(); stack.currentIndex = 0; ToastManager.add("注册成功，请登录", "success", "注册成功", 3000) }
-            else ToastManager.add(msg || "注册失败", "error", "注册失败", 3000)
+            if (ok) { registerForm.reset(); stack.currentIndex = 0; ToastManager.add(qsTr("注册成功，快登录体验吧！"), "success", qsTr("欢迎加入"), 3000) }
+            else ToastManager.add(msg || qsTr("注册失败"), "error", qsTr("注册失败"), 3000)
         }
-        function onSendCodeResult(ok, msg) { if (!ok) ToastManager.add(msg || "发送失败", "error", "请重试", 3000) }
+        function onSendCodeResult(ok, msg) { if (!ok) ToastManager.add(msg || qsTr("发送失败"), "error", qsTr("请重试"), 3000) }
         function onResetPasswordResult(ok, msg) {
             resetForm.loading = false
-            if (ok) { stack.currentIndex = 0; ToastManager.add("密码已重置，请登录", "success", "重置成功", 4000) }
-            else ToastManager.add(msg || "重置失败", "error", "重置失败", 3000)
+            if (ok) { stack.currentIndex = 0; ToastManager.add(qsTr("密码重置成功，请重新登录"), "success", qsTr("密码已更新"), 4000) }
+            else ToastManager.add(msg || qsTr("重置失败"), "error", qsTr("重置失败"), 3000)
         }
         function onOauthUrlReady(url) {
-            if (url) { Qt.openUrlExternally(url); ToastManager.add("跳转授权中...", "info", "第三方登录", 3000) }
-            else ToastManager.add("授权暂不可用", "error", "请确认后端已启动", 4000)
+            if (url) { Qt.openUrlExternally(url); ToastManager.add(qsTr("跳转授权中..."), "info", qsTr("第三方登录"), 3000) }
+            else ToastManager.add(qsTr("授权暂不可用"), "error", qsTr("请确认后端已启动"), 4000)
         }
     }
     Connections {
@@ -49,10 +51,11 @@ ScrollPage {
         function onOauthReceived(json) {
             var data = JSON.parse(json)
             if (data.mode === "bind") {
-                ToastManager.add("关联成功", "success", data.provider || "", 3000)
+                ToastManager.add(qsTr("绑定成功！"), "success", data.provider || "", 3000)
                 Api.setAuth(json); Api.fetchStats(); Api.fetchOAuthLinks()
             } else {
-                ToastManager.add("登录成功", "success", "欢迎回来", 3000)
+                loginForm.clear()
+                ToastManager.add(qsTr("欢迎回来！"), "success", qsTr("登录成功"), 3000)
                 Api.setAuth(json); Api.fetchStats()
                 stack.currentIndex = 4
             }
@@ -70,7 +73,7 @@ ScrollPage {
     ColumnLayout {
         Layout.alignment: Qt.AlignHCenter; Layout.bottomMargin: 32; spacing: 12
         Image { Layout.alignment: Qt.AlignHCenter; width: 50; height: 50; sourceSize.width: 108; sourceSize.height: 108; fillMode: Image.PreserveAspectFit; source: "qrc:/qml/images/cookie.svg" }
-        Text { Layout.alignment: Qt.AlignHCenter; text: "Surety"; color: "#e6edf3"; font.pixelSize: 24; font.weight: Font.Bold; font.family: "Microsoft YaHei UI" }
+        Text { Layout.alignment: Qt.AlignHCenter; text: "Surety"; color: Theme.text_primary; font.pixelSize: 24; font.weight: Font.Bold; font.family: "Microsoft YaHei UI" }
     }
 
     // ── 页面栈 ──
@@ -84,7 +87,7 @@ ScrollPage {
             id: loginForm
             Layout.fillWidth: true
             onLoginClicked: function(email, pwd, remember) {
-                if (email === "" || pwd === "") { ToastManager.add("请填写邮箱和密码", "warning", "提示", 2000); return }
+                if (email === "" || pwd === "") { ToastManager.add(qsTr("请填写邮箱和密码"), "warning", qsTr("提示"), 2000); return }
                 loginForm.loading = true; Auth.login(email, pwd, remember)
             }
             onForgotPassword: { clearAll(); stack.currentIndex = 2 }
@@ -97,12 +100,12 @@ ScrollPage {
             Layout.fillWidth: true
             countdown: panel.countdown
             onSendCodeRequested: function(email) {
-                if (email === "" || email.indexOf("@") < 0) { ToastManager.add("请输入有效邮箱", "warning", "提示", 2000); return }
+                if (email === "" || email.indexOf("@") < 0) { ToastManager.add(qsTr("请输入有效邮箱"), "warning", qsTr("提示"), 2000); return }
                 panel.countdown = 60; ct.start(); Auth.sendCode(email, "register")
             }
             onSwitchToLogin: { clearAll(); stack.currentIndex = 0 }
             onRegisterClicked: function(email, username, password, confirm, code) {
-                if (password !== confirm) { ToastManager.add("两次密码不一致", "warning", "提示", 2000); return }
+                if (password !== confirm) { ToastManager.add(qsTr("两次密码不一致"), "warning", qsTr("提示"), 2000); return }
                 registerForm.loading = true; Auth.registerUser(email, password, code)
             }
         }
@@ -113,12 +116,12 @@ ScrollPage {
             Layout.fillWidth: true
             countdown: panel.countdown
             onSendCodeRequested: function(email) {
-                if (email === "" || email.indexOf("@") < 0) { ToastManager.add("请输入有效邮箱", "warning", "提示", 2000); return }
+                if (email === "" || email.indexOf("@") < 0) { ToastManager.add(qsTr("请输入有效邮箱"), "warning", qsTr("提示"), 2000); return }
                 panel.countdown = 60; ct.start(); Auth.sendCode(email, "reset")
             }
             onBackToLogin: { clearAll(); stack.currentIndex = 0 }
             onResetRequested: function(email, code, newPwd, confirm) {
-                if (newPwd !== confirm) { ToastManager.add("两次密码不一致", "warning", "提示", 2000); return }
+                if (newPwd !== confirm) { ToastManager.add(qsTr("两次密码不一致"), "warning", qsTr("提示"), 2000); return }
                 resetForm.loading = true; Auth.resetPassword(email, code, newPwd)
             }
         }
@@ -140,7 +143,7 @@ ScrollPage {
                 if (Api.provider === "password") {
                     stack.currentIndex = 5  // 密码登录 → 关联页
                 } else {
-                    ToastManager.add("请先创建账号密码", "warning", "提示", 5000)
+                    ToastManager.add(qsTr("请先创建账号密码"), "warning", qsTr("提示"), 5000)
                     stack.currentIndex = 1  // OAuth 登录 → 注册页
                 }
             }

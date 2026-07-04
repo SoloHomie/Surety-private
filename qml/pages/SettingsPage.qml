@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
@@ -8,7 +9,7 @@ Rectangle {
     id: settingsPage
     width: 1320
     height: 936
-    color: "#010409"
+    color: Theme.bg_input
     clip: true
 
     property string currentPage: "general"
@@ -46,9 +47,9 @@ Rectangle {
     // ═══════════════════════════════════════════════════
     Rectangle {
         id: contentArea
-        color: "#0d1117"
+        color: Theme.bg_page
         radius: 10
-        border.color: "#21262d"
+        border.color: Theme.border_default
         border.width: 1
         anchors.left: parent.left
         anchors.right: parent.right
@@ -65,5 +66,6 @@ Rectangle {
         SubPageSlot { active: settingsPage.currentPage === "advanced";    SettingsAdvanced   { anchors.fill: parent } }
         SubPageSlot { active: settingsPage.currentPage === "about";       SettingsAbout      { anchors.fill: parent } }
         SubPageSlot { active: settingsPage.currentPage === "beta";        SettingsBeta       { anchors.fill: parent } }
+        SubPageSlot { active: settingsPage.currentPage === "wallet";      WalletPage         { anchors.fill: parent } }
     }
 }

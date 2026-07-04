@@ -1,12 +1,13 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Layouts
 
 Rectangle {
     id: root
-    color: "#161b22"
+    color: Theme.bg_card
     radius: 24
     border.width: 1
-    border.color: "#30363d"
+    border.color: Theme.border_standard
 
     Layout.preferredWidth: 220
     Layout.preferredHeight: 140
@@ -37,7 +38,7 @@ Rectangle {
     Text {
         id: labelText
         height: 24
-        color: "#8b949e"
+        color: Theme.text_secondary
         text: root.label
         anchors.left: parent.left; anchors.right: parent.right
         anchors.top: parent.top
@@ -51,7 +52,7 @@ Rectangle {
 
     Text {
         id: valueText
-        color: "#ffffff"
+        color: Theme.text_bright
         text: root.value
         anchors.left: parent.left; anchors.right: parent.right
         anchors.top: labelText.bottom; anchors.bottom: parent.bottom

@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 
 //=============================================================================
@@ -33,22 +34,22 @@ Item {
     readonly property bool _disabled: !enabled
 
     // ---- 颜色 (GitHub Primer Dark 硬编码) ----
-    readonly property color clr_track_off:      "#010409"   // canvas.inset
-    readonly property color clr_track_on:       "#1f6feb"   // accent.emphasis
-    readonly property color clr_track_disabled: "#21262d"   // control.disabled
+    readonly property color clr_track_off:      Theme.bg_input   // canvas.inset
+    readonly property color clr_track_on:       Theme.accent   // accent.emphasis
+    readonly property color clr_track_disabled: Theme.border_default   // control.disabled
 
-    readonly property color clr_border_off:        "#30363d"   // border.default
-    readonly property color clr_border_off_hover:  "#484f58"   // border.emphasis
-    readonly property color clr_border_on:         "#1f6feb"   // accent.emphasis
-    readonly property color clr_border_on_hover:   "#388bfd"   // blue.4
-    readonly property color clr_border_disabled:   "#21262d"   // border.muted
+    readonly property color clr_border_off:        Theme.border_standard   // border.default
+    readonly property color clr_border_off_hover:  Theme.text_disabled   // border.emphasis
+    readonly property color clr_border_on:         Theme.accent   // accent.emphasis
+    readonly property color clr_border_on_hover:   Theme.accent_hover   // blue.4
+    readonly property color clr_border_disabled:   Theme.border_default   // border.muted
 
-    readonly property color clr_knob_off:      "#8b949e"   // fg.muted
-    readonly property color clr_knob_on:       "#ffffff"   // fg.onEmphasis
-    readonly property color clr_knob_disabled: "#484f58"   // disabled text
+    readonly property color clr_knob_off:      Theme.text_secondary   // fg.muted
+    readonly property color clr_knob_on:       Theme.text_bright   // fg.onEmphasis
+    readonly property color clr_knob_disabled: Theme.text_disabled   // disabled text
 
-    readonly property color clr_label:        "#e6edf3"   // fg.default
-    readonly property color clr_label_disabled: "#484f58"
+    readonly property color clr_label:        Theme.text_primary   // fg.default
+    readonly property color clr_label_disabled: Theme.text_disabled
 
     // ---- 交互 ----
     MouseArea {

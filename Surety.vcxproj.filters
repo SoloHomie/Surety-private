@@ -3,7 +3,7 @@
   <ItemGroup>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
@@ -64,6 +64,9 @@
     <Filter Include="src\model">
       <UniqueIdentifier>{C1D2E3F4-A5B6-7890-MODL-2345678901CD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="qml\popups">
+      <UniqueIdentifier>{7ec82bd2-3623-4ed1-9b59-924f1b4e6b8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,6 +82,18 @@
       <Filter>src\service</Filter>
     </ClCompile>
     <ClCompile Include="src\service\OAuthServer.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\UserSettings.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\AssetWatcher.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\SystemTray.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\FileHelper.cpp">
       <Filter>src\service</Filter>
     </ClCompile>
     <ClCompile Include="src\model\AssetListModel.cpp">
@@ -385,6 +400,9 @@
     <None Include="qml\pages\settings\auth\LinkedAccounts.qml">
       <Filter>qml\pages\settings\auth</Filter>
     </None>
+    <None Include="qml\popups\UpdateContent.qml">
+      <Filter>qml\popups</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\network\ApiClient.h">
@@ -397,6 +415,18 @@
       <Filter>src\service</Filter>
     </QtMoc>
     <QtMoc Include="src\service\OAuthServer.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\UserSettings.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\AssetWatcher.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\SystemTray.h">
+      <Filter>src\service</Filter>
+    </QtMoc>
+    <QtMoc Include="src\service\FileHelper.h">
       <Filter>src\service</Filter>
     </QtMoc>
     <QtMoc Include="src\model\AssetListModel.h">

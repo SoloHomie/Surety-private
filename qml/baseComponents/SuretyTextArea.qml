@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -43,21 +44,21 @@ Rectangle {
     // ═══════════════════════════════════════════════════════════════════════
     //  设计 Token（GitHub Primer Dark）
     // ═══════════════════════════════════════════════════════════════════════
-    readonly property color _bg:            "#0d1117"
-    readonly property color _bgReadOnly:    "#0a0e13"
-    readonly property color _border:        "#21262d"
-    readonly property color _borderHover:   "#30363d"
-    readonly property color _borderFocus:   "#1f6feb"
-    readonly property color _borderError:   "#f85149"
-    readonly property color _text:          "#e6edf3"
-    readonly property color _textReadOnly:  "#6e7681"
-    readonly property color _placeholder:   "#484f58"
-    readonly property color _helper:        "#8b949e"
-    readonly property color _error:         "#f85149"
-    readonly property color _counter:       "#6e7681"
-    readonly property color _counterWarn:   "#d29922"
-    readonly property color _selection:     "#1f6feb"
-    readonly property color _selectionFg:   "#ffffff"
+    readonly property color _bg:            Theme.bg_page
+    readonly property color _bgReadOnly:    Theme.input_readonly_bg
+    readonly property color _border:        Theme.border_default
+    readonly property color _borderHover:   Theme.border_standard
+    readonly property color _borderFocus:   Theme.accent
+    readonly property color _borderError:   Theme.danger_fg
+    readonly property color _text:          Theme.text_primary
+    readonly property color _textReadOnly:  Theme.text_hint
+    readonly property color _placeholder:   Theme.text_disabled
+    readonly property color _helper:        Theme.text_secondary
+    readonly property color _error:         Theme.danger_fg
+    readonly property color _counter:       Theme.text_hint
+    readonly property color _counterWarn:   Theme.warning_fg
+    readonly property color _selection:     Theme.accent
+    readonly property color _selectionFg:   Theme.text_bright
 
     // ═══════════════════════════════════════════════════════════════════════
     //  Label（可选）
@@ -216,7 +217,7 @@ Rectangle {
                 contentItem: Rectangle {
                     implicitWidth: 4
                     radius: 2
-                    color: "#6e7681"
+                    color: Theme.text_hint
                     opacity: {
                         if (!vScrollBar.active && !vScrollBar.hovered) return 0.3
                         if (vScrollBar.hovered) return 0.7

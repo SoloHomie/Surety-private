@@ -1,16 +1,19 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import "../../baseComponents"
 
 Rectangle {
     id: heatRanking
-    color: "#161b22"
+    color: Theme.bg_card
     radius: 12
     border.width: 1
-    border.color: "#30363d"
+    border.color: Theme.border_standard
     clip: true
 
-    signal itemClicked(string name, string type, string callCount)
+    signal itemClicked(var listing)
+
+    property var rankings: []
 
     // 入场：缩放+淡入
     scale: 0.95
@@ -34,8 +37,8 @@ Rectangle {
         anchors.rightMargin: 16
         anchors.topMargin: 16
         height: 24
-        text: qsTr("Heat Ranking")
-        color: "#e6edf3"
+        text: qsTr("热度榜")
+        color: Theme.text_primary
         font.pixelSize: 18
         font.weight: Font.DemiBold
         font.family: "JetBrains Mono"
@@ -51,7 +54,7 @@ Rectangle {
         anchors.leftMargin: 16
         anchors.rightMargin: 16
         height: 1
-        color: "#30363d"
+        color: Theme.border_standard
     }
 
     // ── 排行列表 ──
@@ -68,26 +71,17 @@ Rectangle {
         clip: true
         spacing: 2
 
-        model: ListModel {
-            ListElement { rank: 1; icon: ""; name: "半导体图谱 Q1";      type: "知识包"; call: "2,340 次" }
-            ListElement { rank: 2; icon: ""; name: "竞品分析脚本 v2.3";   type: "脚本";   call: "1,890 次" }
-            ListElement { rank: 3; icon: ""; name: "供应链探针 Agent";    type: "工具";   call: "1,560 次" }
-            ListElement { rank: 4; icon: ""; name: "晶圆良率预测模型";    type: "模型";   call: "1,230 次" }
-            ListElement { rank: 5; icon: ""; name: "射频仿真工作流";      type: "工作流";  call: "980 次"  }
-            ListElement { rank: 6; icon: ""; name: "GaN 技术知识库";      type: "知识包"; call: "760 次"  }
-            ListElement { rank: 7; icon: ""; name: "先进封装工艺流程";     type: "脚本";   call: "640 次"  }
-            ListElement { rank: 8; icon: ""; name: "专利地图分析工具";    type: "工具";   call: "520 次"  }
-        }
+        model: heatRanking.rankings
 
         delegate: RankingDelegate {
             width: listView.width
-            rank: model.rank
-            assetIcon: model.icon
-            assetName: model.name
-            assetType: model.type
-            callCount: model.call
+            rank: index + 1
+            assetIcon: ""
+            assetName: modelData.name || ""
+            assetType: modelData.type || ""
+            callCount: (modelData.subCount || 0) + " " + qsTr("次订阅")
 
-            onNameClicked: heatRanking.itemClicked(model.name, model.type, model.call)
+            onNameClicked: heatRanking.itemClicked(modelData)
         }
 
         ScrollBar.vertical: SuretyScrollBar { }

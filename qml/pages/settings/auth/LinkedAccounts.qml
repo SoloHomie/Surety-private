@@ -1,4 +1,5 @@
 import QtQuick
+import "../../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
@@ -22,8 +23,8 @@ ColumnLayout {
 
     Text {
         Layout.fillWidth: true
-        text: "关联第三方账号后，可使用第三方快速登录"
-        color: "#8b949e"; font.pixelSize: 15
+        text: qsTr("关联第三方账号后，可使用第三方快速登录")
+        color: Theme.text_secondary; font.pixelSize: 15
         font.family: "Microsoft YaHei UI"
         wrapMode: Text.WordWrap
     }
@@ -53,7 +54,7 @@ ColumnLayout {
     // ── 返回 ──
     SuretyBtn {
         Layout.fillWidth: true; Layout.preferredHeight: 40
-        text: "← 返回"; variant: "outline"
+        text: "← " + qsTr("返回"); variant: "outline"
         font.pixelSize: 16
         onClicked: root.backToLogin()
     }
@@ -71,16 +72,16 @@ ColumnLayout {
     function bindOAuth(p) {
         var port = OAuthServer && OAuthServer.port ? OAuthServer.port : 0
         Auth.getOAuthBindUrl(p, port)
-        ToastManager.add("请在浏览器中授权", "info", "关联 " + p, 3000)
+        ToastManager.add(qsTr("请在浏览器中授权"), "info", qsTr("关联") + " " + p, 3000)
     }
     function unbindOAuth(p) {
         // 如果是唯一的登录方式，提醒设密码
         if (Api.oauthLinks.length <= 1 && !hasPasswordLogin()) {
-            ToastManager.add("请先设置账户密码再解除绑定", "warning", "提示", 4000)
+            ToastManager.add(qsTr("请先设置账户密码再解除绑定"), "warning", qsTr("提示"), 4000)
             return
         }
         Api.unlinkOAuth(p)
-        ToastManager.add("已解除关联", "info", p, 2000)
+        ToastManager.add(qsTr("已解除关联"), "info", p, 2000)
     }
 
     // ── Provider 卡片组件 ──
@@ -94,8 +95,8 @@ ColumnLayout {
         signal unbindClicked()
 
         Layout.fillWidth: true; Layout.preferredHeight: 64
-        color: "#161b22"; radius: 10
-        border.color: "#21262d"; border.width: 1
+        color: Theme.bg_card; radius: 10
+        border.color: Theme.border_default; border.width: 1
 
         RowLayout {
             anchors.fill: parent; anchors.margins: 14; spacing: 14
@@ -108,19 +109,19 @@ ColumnLayout {
 
             ColumnLayout {
                 spacing: 2; Layout.fillWidth: true
-                Text { text: providerName; color: "#e6edf3"; font.pixelSize: 16; font.weight: Font.DemiBold; font.family: "Microsoft YaHei UI" }
+                Text { text: providerName; color: Theme.text_primary; font.pixelSize: 16; font.weight: Font.DemiBold; font.family: "Microsoft YaHei UI" }
                 Text {
-                    text: bound ? "● 已关联" : "○ 未关联"
-                    color: bound ? "#3fb950" : "#8b949e"; font.pixelSize: 13; font.family: "Microsoft YaHei UI"
+                    text: bound ? ("● " + qsTr("已关联")) : ("○ " + qsTr("未关联"))
+                    color: bound ? Theme.success_fg : Theme.text_secondary; font.pixelSize: 13; font.family: "Microsoft YaHei UI"
                 }
             }
 
             Item { Layout.fillWidth: true }  // 弹簧，按钮靠右
 
             SuretyBtn {
-                text: bound ? "解除" : "关联"
+                text: bound ? qsTr("解除") : qsTr("关联")
                 variant: bound ? "danger" : "outline"
-                Layout.preferredWidth: 64; Layout.preferredHeight: 34
+                Layout.preferredHeight: 34
                 font.pixelSize: 16; font.weight: Font.DemiBold
                 onClicked: bound ? unbindClicked() : bindClicked()
             }

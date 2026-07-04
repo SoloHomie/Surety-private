@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 
@@ -8,8 +9,12 @@ import QtQuick.Layouts
 //=============================================================================
 Rectangle {
     id: root
-    width: 80
-    height: 32
+    implicitWidth: Math.max(80, btnText.implicitWidth + 28)
+    implicitHeight: 32
+    Layout.preferredWidth: implicitWidth
+    Layout.preferredHeight: implicitHeight
+    width: implicitWidth
+    height: implicitHeight
     radius: 6
 
     property string text:       "Button"
@@ -34,26 +39,26 @@ Rectangle {
     readonly property bool _out: variant === "outline"
 
     // ---- 背景色 ----
-    readonly property color _bg: !enabled ? "#21262d" :
-        _pri && mouseArea.pressed            ? "#1158c7" :
-        _pri && mouseArea.containsMouse      ? "#388bfd" :
-        _pri                                 ? "#1f6feb" :
-        _dng && mouseArea.pressed            ? "#b62324" :
-        _dng && mouseArea.containsMouse      ? "#f85149" :
-        _dng                                 ? "#da3633" :
-        _out && mouseArea.pressed            ? "#30363d" :
-        _out && mouseArea.containsMouse      ? "#21262d" :
+    readonly property color _bg: !enabled ? Theme.border_default :
+        _pri && mouseArea.pressed            ? Theme.accent_press :
+        _pri && mouseArea.containsMouse      ? Theme.accent_hover :
+        _pri                                 ? Theme.accent :
+        _dng && mouseArea.pressed            ? Theme.btn_danger_press :
+        _dng && mouseArea.containsMouse      ? Theme.danger_fg :
+        _dng                                 ? Theme.danger :
+        _out && mouseArea.pressed            ? Theme.border_standard :
+        _out && mouseArea.containsMouse      ? Theme.border_default :
         _out                                 ? "transparent" :
-        mouseArea.pressed                    ? "#30363d" :
-        mouseArea.containsMouse              ? "#444c56" : "#30363d"
+        mouseArea.pressed                    ? Theme.border_standard :
+        mouseArea.containsMouse              ? Theme.border_emphasis : Theme.border_standard
 
     // ---- 边框 ----
-    readonly property color _border: !enabled ? "#21262d" :
-        _out ? "#30363d" : "transparent"
+    readonly property color _border: !enabled ? Theme.border_default :
+        _out ? Theme.border_standard : "transparent"
 
     // ---- 文字色 ----
-    readonly property color _text: !enabled ? "#484f58" :
-        _pri || _dng ? "#ffffff" : "#e6edf3"
+    readonly property color _text: !enabled ? Theme.text_disabled :
+        _pri || _dng ? Theme.text_bright : Theme.text_primary
 
     color: _bg
     border.width: _out ? 1 : 0

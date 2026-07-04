@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 
 //=============================================================================
@@ -12,7 +13,7 @@ ScrollBar {
     contentItem: Rectangle {
         implicitWidth: 4
         radius: 2
-        color: "#6e7681"
+        color: Theme.text_hint
         opacity: {
             if (!root.active && !root.hovered) return 0
             if (root.hovered) return 0.7

@@ -1,5 +1,6 @@
 #include "ApiClient.h"
 #include "../model/AssetListModel.h"
+#include "../model/MarketListModel.h"
 #include <QMap>
 #include <QSettings>
 #define NOMINMAX
@@ -12,30 +13,42 @@ ApiClient* ApiClient::instance() {
     return &s;
 }
 
+// DPAPI optional entropy — binds encrypted blobs to this application specifically.
+// Even another process running as the same user cannot decrypt without this value.
+static const BYTE DPAPI_ENTROPY[] = {
+    0xA7,0x3F,0xC1,0x88,0x2D,0x5E,0x9B,0x14,0x66,0xF0,0x3D,0x81,0xCA,0x57,0xE2,0x09
+};
+
 static QByteArray protectData(const QByteArray &plain) {
-    DATA_BLOB in, out;
+    DATA_BLOB in, out, entropy;
     in.pbData = (BYTE*)plain.constData();
-    in.cbData = plain.size();
-    if (!CryptProtectData(&in, L"SuretySession", nullptr, nullptr, nullptr, 0, &out))
+    in.cbData = (DWORD)plain.size();
+    entropy.pbData = (BYTE*)DPAPI_ENTROPY;
+    entropy.cbData = sizeof(DPAPI_ENTROPY);
+    if (!CryptProtectData(&in, L"SuretySession", &entropy, nullptr, nullptr, 0, &out))
         return {};
-    QByteArray result((const char*)out.pbData, out.cbData);
+    QByteArray result((const char*)out.pbData, (int)out.cbData);
     LocalFree(out.pbData);
     return result.toBase64();
 }
 
 static QByteArray unprotectData(const QByteArray &b64) {
     QByteArray cipher = QByteArray::fromBase64(b64);
-    DATA_BLOB in, out;
+    DATA_BLOB in, out, entropy;
     in.pbData = (BYTE*)cipher.constData();
-    in.cbData = cipher.size();
-    if (!CryptUnprotectData(&in, nullptr, nullptr, nullptr, nullptr, 0, &out))
+    in.cbData = (DWORD)cipher.size();
+    entropy.pbData = (BYTE*)DPAPI_ENTROPY;
+    entropy.cbData = sizeof(DPAPI_ENTROPY);
+    if (!CryptUnprotectData(&in, nullptr, &entropy, nullptr, nullptr, 0, &out))
         return {};
-    QByteArray result((const char*)out.pbData, out.cbData);
+    QByteArray result((const char*)out.pbData, (int)out.cbData);
     LocalFree(out.pbData);
     return result;
 }
 
-ApiClient::ApiClient(QObject *parent) : QObject(parent) {}
+ApiClient::ApiClient(QObject *parent) : QObject(parent) {
+    m_baseUrl = qEnvironmentVariable("SUREITY_API_URL", "https://api.solohomie.top");
+}
 
 void ApiClient::setupRequest(QNetworkRequest &req) {
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -203,6 +216,116 @@ void ApiClient::quickUnlistAsset(const QString &assetId) {
     });
 }
 
+void ApiClient::subscribe(const QString &listingId) {
+    QVariantMap b; b["email"] = m_email; b["listing_id"] = listingId;
+    post("/api/subscriptions", b, [this](int s, QByteArray r) {
+        QJsonObject o = QJsonDocument::fromJson(r).object();
+        bool ok = (s == 200 && o["success"].toBool());
+        emit subscribeFinished(ok, o["message"].toString());
+    });
+}
+
+void ApiClient::claimBenefit(const QString &benefitType) {
+    QVariantMap b; b["email"] = m_email; b["benefit_type"] = benefitType;
+    post("/api/benefits/claim", b, [this](int s, QByteArray r) {
+        QJsonObject o = QJsonDocument::fromJson(r).object();
+        bool ok = (s == 200 && o["success"].toBool());
+        emit benefitClaimed(ok, ok ? o["message"].toString() : o["message"].toString());
+    });
+}
+
+void ApiClient::fetchBalance() {
+    QVariantMap p; p["email"] = m_email;
+    get("/api/wallet/balance", p, [this](int s, QByteArray r) {
+        if (s == 200) {
+            QJsonObject o = QJsonDocument::fromJson(r).object();
+            m_balance = (quint64)o["balance"].toDouble();
+            emit suretyBalanceChanged();
+        }
+    });
+}
+
+void ApiClient::fetchTransactions(const QString &type, int page) {
+    QVariantMap p; p["email"] = m_email;
+    if (!type.isEmpty()) p["type"] = type;
+    p["page"] = QString::number(page);
+    p["size"] = "50";
+    get("/api/transactions", p, [this](int s, QByteArray r) {
+        if (s != 200) return;
+        QVariantList list;
+        QJsonArray arr = QJsonDocument::fromJson(r).object()["transactions"].toArray();
+        for (auto v : arr) {
+            QJsonObject o = v.toObject();
+            QVariantMap m;
+            m["type"] = o["type"].toString();
+            m["amount"] = (qlonglong)o["amount"].toDouble();
+            m["desc"] = o["description"].toString();
+            m["time"] = o["created_at"].toString();
+            m["balanceAfter"] = (quint64)o["balance_after"].toDouble();
+            list.append(m);
+        }
+        emit transactionsReady(list);
+    });
+}
+
+void ApiClient::fetchBenefits() {
+    get("/api/benefits/available", {}, [this](int s, QByteArray r) {
+        if (s != 200) return;
+        QVariantList list;
+        QJsonArray arr = QJsonDocument::fromJson(r).object()["benefits"].toArray();
+        for (auto v : arr) {
+            QJsonObject o = v.toObject();
+            QVariantMap m;
+            m["type"] = o["type"].toString();
+            m["amount"] = (quint64)o["amount"].toDouble();
+            m["description"] = o["description"].toString();
+            list.append(m);
+        }
+        emit benefitsReady(list);
+    });
+}
+
+void ApiClient::checkBenefits() {
+    QVariantMap p; p["email"] = m_email;
+    get("/api/benefits/check", p, [this](int s, QByteArray r) {
+        if (s != 200) return;
+        QStringList claimed;
+        QJsonArray arr = QJsonDocument::fromJson(r).object()["claimed"].toArray();
+        for (auto v : arr) claimed.append(v.toString());
+        emit benefitsChecked(claimed);
+    });
+}
+
+void ApiClient::fetchHotListings(int limit) {
+    QVariantMap p; p["limit"] = QString::number(limit);
+    get("/api/listings/hot", p, [this](int s, QByteArray r) {
+        if (s != 200) return;
+        QJsonArray arr = QJsonDocument::fromJson(r).object()["listings"].toArray();
+        QVariantList result;
+        for (auto v : arr) {
+            auto l = v.toObject(); auto a = l["asset"].toObject();
+            auto pc = l["pricing"].toObject(); auto sl = l["seller"].toObject();
+            QVariantMap m;
+            m["listingId"] = l["listing_id"].isString()
+                ? l["listing_id"].toString()
+                : QString::number((qint64)l["listing_id"].toDouble(), 'f', 0);
+            m["name"]     = a["name"].toString();
+            m["type"]     = a["type"].toString();
+            m["desc"]     = a["description"].toString();
+            m["oncePrice"]= pc["once_price"].toDouble();
+            m["subPrice"] = pc["sub_price"].toDouble();
+            m["subDuration"] = pc["sub_duration_days"].toInt(30);
+            m["subCount"] = l["sub_count"].toInt();
+            m["author"]   = sl["name"].toString();
+            m["sellerId"] = sl["id"].isString()
+                ? sl["id"].toString()
+                : QString::number((qint64)sl["id"].toDouble(), 'f', 0);
+            result.append(m);
+        }
+        emit hotListingsReady(result);
+    });
+}
+
 void ApiClient::fetchOAuthLinks() {
     QVariantMap p; p["email"] = m_email;
     get("/api/auth/oauth/links", p, [this](int s, QByteArray r) {
@@ -245,8 +368,10 @@ void ApiClient::checkUpdate() {
                 return 0;
             };
 
+            bool forceUpdate = o["force_update"].toBool();
             QVariantMap info;
             info["hasUpdate"]   = compareVer(latest, curVer) > 0;
+            info["forceUpdate"] = forceUpdate;
             info["currentVer"]  = curVer;
             info["latestVer"]   = latest;
             info["githubUrl"]   = o["github_url"].toString();
@@ -256,6 +381,51 @@ void ApiClient::checkUpdate() {
         } else {
             emit updateCheckFinished({});
         }
+    });
+}
+
+// ── 拉取 Marketplace 上架列表 ───────────────────────
+void ApiClient::fetchListings(const QString &type, const QString &search, int page) {
+    QVariantMap p;
+    if (!type.isEmpty())   p["type"] = type;
+    if (!search.isEmpty()) p["q"]    = search;
+    p["page"] = QString::number(page);
+    p["size"] = "50";
+
+    get("/api/listings", p, [this](int s, QByteArray r) {
+        if (s != 200 || !m_marketModel) return;
+        QJsonObject obj  = QJsonDocument::fromJson(r).object();
+        QJsonArray  arr  = obj["listings"].toArray();
+        QJsonDocument doc(arr);
+        m_marketModel->loadFromJson(QString::fromUtf8(doc.toJson(QJsonDocument::Compact)));
+    });
+}
+
+// ── 拉取单个 listing 最新数据（购买前验证）─────────────
+void ApiClient::fetchListingDetail(const QString &listingId, const QVariantMap &cached) {
+    QVariantMap p; p["id"] = listingId;
+    get("/api/listings/detail", p, [this, cached](int s, QByteArray r) {
+        if (s != 200) {
+            emit listingDetailFetched({}, cached);
+            return;
+        }
+        QJsonObject obj = QJsonDocument::fromJson(r).object();
+        QJsonObject l  = obj["listing"].toObject();
+        QJsonObject a  = l["asset"].toObject();
+        QJsonObject pr = l["pricing"].toObject();
+        QJsonObject sl = l["seller"].toObject();
+        QVariantMap latest;
+        latest["name"]         = a["name"].toString();
+        latest["type"]         = a["type"].toString();
+        latest["desc"]         = a["description"].toString();
+        latest["version"]      = a["version"].toString();
+        latest["author"]       = sl["name"].toString();
+        latest["oncePrice"]    = pr["once_price"].toDouble();
+        latest["subPrice"]     = pr["sub_price"].toDouble();
+        latest["subDuration"]  = pr["sub_duration_days"].toInt(30);
+        latest["listingId"]    = l["listing_id"].toString();
+        latest["status"]       = l["status"].toString();
+        emit listingDetailFetched(latest, cached);
     });
 }
 

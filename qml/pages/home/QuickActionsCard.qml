@@ -1,17 +1,18 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 
 Rectangle {
     id: quickRect
-    color: "#161b22"
+    color: Theme.bg_card
     radius: 12
     border.width: 1
-    border.color: "#21262d"
+    border.color: Theme.border_default
 
     Text {
         id: titleText
         text: qsTr("Quick Actions")
-        color: "#8b949e"
+        color: Theme.text_secondary
         font.pixelSize: 13; font.weight: Font.DemiBold
         font.family: "JetBrains Mono"
         anchors.left: parent.left;   anchors.leftMargin: 16
@@ -25,7 +26,7 @@ Rectangle {
 
         QuickActionsDelegate {
             iconSource: "qrc:/qml/images/list_icon.svg"
-            tooltip: "快速上架资产"
+            tooltip: qsTr("快速上架资产")
         }
 
         QuickActionsDelegate {

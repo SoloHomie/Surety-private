@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
@@ -13,22 +14,25 @@ Item {
     property string itemName:      ""
     property string itemType:      ""
     property string itemIcon:      ""
-    property color  itemColor:     "#58A6FF"
+    property color  itemColor:     Theme.accent_text
     property string itemAuthor:    ""
     property string description:   ""
     property string version:       "1.0"
 
     // 定价
-    property double oncePrice:     0      // 永久买断价格
-    property double subPrice:      0      // 订阅价格
+    property double oncePrice:     0      // 买断价格（0=免费买断）
+    property double subPrice:      0      // 订阅价格（0=不提供）
     property int    subDuration:   30     // 订阅周期（天）
-    property bool   hasOnce:       true   // 是否有买断选项
-    property bool   hasSub:        true   // 是否有订阅选项
 
-    // 选中的方案: "once" | "subscription"
-    property string selectedModel: root.hasOnce ? "once" : "subscription"
+    // 买断总是可用（至少兜底免费）；订阅仅当价格>0时可用
+    readonly property bool hasSub:  subPrice > 0
+    readonly property bool hasBoth: hasSub   // TagSelector 仅在订阅也提供时显示
 
-    signal purchaseRequested(string model)   // model: "once" | "subscription"
+    // MVP: 仅订阅模式
+    property string selectedModel: "subscription"
+    property bool   isOwnAsset: false
+
+    signal purchaseRequested(string model)
     signal closeRequested()
 
     // ═══════════════════════════════════════════════════
@@ -49,7 +53,7 @@ Item {
             Layout.fillWidth: true
             Text {
                 text: root.itemName || "Untitled"
-                color: "#e6edf3"
+                color: Theme.text_primary
                 font.pixelSize: 22; font.weight: Font.DemiBold
                 font.family: "Microsoft YaHei UI"
                 elide: Text.ElideRight
@@ -82,24 +86,24 @@ Item {
                     Rectangle {
                         height: 24; radius: 6
                         width: typeBadge.implicitWidth + 14
-                        color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.15)
+                        color: Theme.tag_preset_bg
                         Text {
                             id: typeBadge
                             anchors.centerIn: parent
-                            text: root.itemType; color: root.itemColor
+                            text: root.itemType; color: Theme.tag_preset_fg
                             font.pixelSize: 15; font.weight: Font.Bold
                             font.family: "JetBrains Mono"
                         }
                     }
                     Text {
                         visible: root.itemAuthor !== ""
-                        text: root.itemAuthor; color: "#8b949e"
+                        text: root.itemAuthor; color: Theme.text_secondary
                         font.pixelSize: 15; font.family: "Microsoft YaHei UI"
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
                         visible: root.version !== ""
-                        text: "v" + root.version; color: "#6e7681"
+                        text: "v" + root.version; color: Theme.text_hint
                         font.pixelSize: 14; font.family: "JetBrains Mono"
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -107,123 +111,54 @@ Item {
             }
         }
 
-        Rectangle { Layout.fillWidth: true; height: 1; color: "#21262d" }
+        Rectangle { Layout.fillWidth: true; height: 1; color: Theme.border_default }
 
         // ── 描述 ──
         Text {
             Layout.fillWidth: true
             text: root.description || "暂无描述。"
-            color: root.description !== "" ? "#c9d1d9" : "#484f58"
+            color: root.description !== "" ? Theme.text_primary : Theme.text_disabled
             font.pixelSize: 16; font.family: "Microsoft YaHei UI"
             wrapMode: Text.WordWrap; lineHeight: 1.5
             maximumLineCount: 6; elide: Text.ElideRight
         }
 
-        // ── 购买方案选择 ──
-        Text {
-            text: "购买方案"
-            color: "#8b949e"
-            font.pixelSize: 14; font.weight: Font.DemiBold
-            font.family: "Microsoft YaHei UI"
-        }
+        // ═══════════════════════════════════════════════════
+        //  定价（两者都有 → SuretyTagSelector 切换 / 仅一种 → 直接展示）
+        // ═══════════════════════════════════════════════════
 
-        SuretyTagSelector {
-            id: modelSelector
-            width: 300
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignLeft
-            displayMode: "segment"
-            segmentHeight: 40; segmentRadius: 6
-
-            model: {
-                var items = []
-                if (root.hasOnce) items.push({ label: "永久买断" })
-                if (root.hasSub)  items.push({ label: "订阅" })
-                return items
-            }
-
-            selectedIndex: root.selectedModel === "once" ? 0
-                         : (root.hasOnce ? 1 : 0)
-
-            onTagSelected: function(idx) {
-                if (root.hasOnce && root.hasSub)
-                    root.selectedModel = idx === 0 ? "once" : "subscription"
-                else if (root.hasOnce)
-                    root.selectedModel = "once"
-                else
-                    root.selectedModel = "subscription"
-            }
-        }
+        // MVP: 仅订阅，隐藏买断/订阅切换
 
         // ── 价格卡片 ──
         Rectangle {
-            Layout.fillWidth: true
-            Layout.topMargin: 4
-            color: "#0d1117"
-            radius: 10
-            border.width: 1; border.color: "#21262d"
-            height: priceCardContent.implicitHeight + 40
+            Layout.fillWidth: true; Layout.preferredHeight: 64
+            radius: 10; color: Theme.bg_page
+            border.width: 1; border.color: Theme.border_default
 
-            ColumnLayout {
-                id: priceCardContent
-                anchors.left: parent.left;   anchors.leftMargin: 24
-                anchors.right: parent.right; anchors.rightMargin: 24
-                anchors.top: parent.top;     anchors.topMargin: 20
-                spacing: 8
-
-                // 价格
-                Text {
-                    text: root.selectedModel === "once"
-                          ? (root.oncePrice > 0 ? "¥" + root.oncePrice.toFixed(2) : "免费")
-                          : (root.subPrice > 0 ? "¥" + root.subPrice.toFixed(2) : "免费")
-                    color: "#e6edf3"
-                    font.pixelSize: 32; font.weight: Font.Bold
-                    font.family: "JetBrains Mono"
+            RowLayout {
+                anchors.centerIn: parent; spacing: 12
+                Rectangle {
+                    height: 22; radius: 6; width: priceTag.implicitWidth + 14
+                    color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.15)
+                    Text { id: priceTag; anchors.centerIn: parent
+                        text: "订阅"
+                        color: root.itemColor; font.pixelSize: 14; font.weight: Font.Bold
+                        font.family: "JetBrains Mono" }
                 }
-
-                // 周期
                 Text {
-                    visible: root.selectedModel === "subscription"
-                    text: "/ " + root.subDuration + " 天"
-                    color: "#8b949e"
-                    font.pixelSize: 15
+                    text: root.subPrice > 0 ? "¥" + root.subPrice.toFixed(0) + " / " + root.subDuration + "天" : "免费订阅"
+                    color: Theme.text_primary; font.pixelSize: 24; font.weight: Font.Bold
                     font.family: "JetBrains Mono"
-                }
-
-                // 方案标签 + 说明
-                RowLayout {
-                    spacing: 10
-                    Rectangle {
-                        Layout.preferredHeight: 24
-                        Layout.preferredWidth: badgeText.implicitWidth + 16
-                        radius: 6
-                        color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.12)
-                        Text {
-                            id: badgeText
-                            anchors.centerIn: parent
-                            text: root.selectedModel === "once" ? "永久买断" : "订阅制"
-                            color: root.itemColor
-                            font.pixelSize: 13; font.weight: Font.Bold
-                            font.family: "Microsoft YaHei UI"
-                        }
-                    }
-
-                    Text {
-                        text: root.selectedModel === "once" ? "一次付费，永久拥有" : "到期自动续费，可随时取消"
-                        color: "#6e7681"
-                        font.pixelSize: 13
-                        font.family: "Microsoft YaHei UI"
-                    }
                 }
             }
         }
 
-        // ── 购买按钮（独立一行，全宽）──────────────────
+        // ── 购买按钮（自有资产隐藏）──
         SuretyBtn {
+            visible: !root.isOwnAsset
             Layout.fillWidth: true
-            Layout.topMargin: 4
-            height: 44
-            text: root.selectedModel === "once" ? "立即购买" : "立即订阅"
+            Layout.topMargin: 4; height: 44
+            text: root.subPrice > 0 ? "立即订阅 · ¥" + root.subPrice.toFixed(0) + " / " + root.subDuration + "天" : "免费订阅"
             variant: "primary"
             font.pixelSize: 18; font.weight: Font.Bold
             onClicked: root.purchaseRequested(root.selectedModel)

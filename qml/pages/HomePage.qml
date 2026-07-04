@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
@@ -10,12 +11,20 @@ Rectangle {
     width: 1320
     height: 936
     clip: true
-    color: "#010409"
+    color: Theme.bg_input
 
-    signal marketItemRequested(string name, string type, string callCount)
+    signal marketItemRequested(var listing)
+
+    property var hotList: []
 
     Component.onCompleted: {
         Api.fetchDevLogs()
+        Api.fetchHotListings(10)
+    }
+
+    Connections {
+        target: Api
+        function onHotListingsReady(listings) { homePage.hotList = listings }
     }
 
     PreviewCards {
@@ -45,18 +54,18 @@ Rectangle {
             id: timelineView
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 7
+            Layout.preferredWidth: 6
             model: Api.devLogs
         }
 
         HeatRanking {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 3
-            Layout.maximumWidth: 400
+            Layout.preferredWidth: 4
+            rankings: homePage.hotList
 
-            onItemClicked: function(name, type, calls) {
-                homePage.marketItemRequested(name, type, calls)
+            onItemClicked: function(listing) {
+                homePage.marketItemRequested(listing)
             }
         }
     }

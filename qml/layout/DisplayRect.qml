@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 import "../pages"
 
@@ -6,7 +7,7 @@ Rectangle {
     id: displayRect
     width: 1320
     height: 936
-    color: "#010409"
+    color: Theme.bg_input
     bottomRightRadius: 10
     topLeftRadius: 0
     clip: true
@@ -71,8 +72,8 @@ Rectangle {
         targetScale: displayRect.scaleFor(0)
         HomePage {
             anchors.fill: parent
-            onMarketItemRequested: function(name, type, calls) {
-                displayRect.showMarketDetail(name, type, calls)
+            onMarketItemRequested: function(listing) {
+                displayRect.showMarketDetail(listing)
             }
         }
     }
@@ -102,8 +103,8 @@ Rectangle {
     }
 
     // 供外部调用：导航到市场页并展示指定详情
-    function showMarketDetail(name, type, calls) {
-        marketPage.showExternalDetail(name, type, calls)
+    function showMarketDetail(listing) {
+        marketPage.showExternalDetail(listing)
         switchTo(2)
     }
 }

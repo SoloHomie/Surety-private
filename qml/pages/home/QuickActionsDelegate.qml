@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 
 Rectangle {
@@ -14,13 +15,13 @@ Rectangle {
     signal clicked()
 
     color: {
-        if (isAddSlot) return btnMA.containsMouse ? "#21262d" : "transparent"
-        return btnMA.containsMouse ? "#1f6feb" : "transparent"
+        if (isAddSlot) return btnMA.containsMouse ? Theme.border_default : "transparent"
+        return btnMA.containsMouse ? Theme.accent : "transparent"
     }
     border.width: 1
     border.color: {
-        if (isAddSlot) return btnMA.containsMouse ? "#30363d" : "#21262d"
-        return btnMA.containsMouse ? "transparent" : "#21262d"
+        if (isAddSlot) return btnMA.containsMouse ? Theme.border_standard : Theme.border_default
+        return btnMA.containsMouse ? "transparent" : Theme.border_default
     }
 
     Behavior on color       { ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }

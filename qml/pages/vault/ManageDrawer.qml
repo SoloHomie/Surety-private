@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
@@ -18,8 +19,8 @@ Drawer {
     height: parentHeight + 64
 
     background: Rectangle {
-        color: "#161b22"
-        border.color: "#21262d"
+        color: Theme.bg_card
+        border.color: Theme.border_default
     }
 
     ColumnLayout {
@@ -28,8 +29,8 @@ Drawer {
         spacing: 12
 
         Text {
-            text: "快速管理"
-            color: "#e6edf3"
+            text: qsTr("快速管理")
+            color: Theme.text_primary
             font.pixelSize: 20
             font.weight: Font.Bold
             font.family: "Microsoft YaHei UI"

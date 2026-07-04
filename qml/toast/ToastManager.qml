@@ -1,5 +1,6 @@
 pragma Singleton
 import QtQuick
+import "../themes"
 
 // ═══════════════════════════════════════════════════════════
 //  ToastManager — 全局 Toast 单例桥接

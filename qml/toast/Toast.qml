@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 
 // 全局 Toast 通知 — 从顶部滑入，3秒自动消失
@@ -28,23 +29,23 @@ Rectangle {
             case "success": return "#0d3320"
             case "warning": return "#332210"
             case "error":   return "#330d10"
-            default:        return "#161b22"
+            default:        return Theme.bg_card
         }
     }
     readonly property color _borderColor: {
         switch (toastType) {
-            case "success": return "#238636"
-            case "warning": return "#d29922"
-            case "error":   return "#f85149"
-            default:        return "#30363d"
+            case "success": return Theme.success
+            case "warning": return Theme.warning_fg
+            case "error":   return Theme.danger_fg
+            default:        return Theme.border_standard
         }
     }
     readonly property color _iconColor: {
         switch (toastType) {
-            case "success": return "#3fb950"
-            case "warning": return "#d29922"
-            case "error":   return "#f85149"
-            default:        return "#58a6ff"
+            case "success": return Theme.success_fg
+            case "warning": return Theme.warning_fg
+            case "error":   return Theme.danger_fg
+            default:        return Theme.accent_text
         }
     }
     readonly property string _icon: {
@@ -93,7 +94,7 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: _icon
-                color: "#0d1117"
+                color: Theme.bg_page
                 font.pixelSize: 11
                 font.weight: Font.Bold
                 font.family: "JetBrains Mono"
@@ -105,7 +106,7 @@ Rectangle {
             id: toastText
             anchors.verticalCenter: parent.verticalCenter
             text: ""
-            color: "#e6edf3"
+            color: Theme.text_primary
             font.pixelSize: 14
             font.weight: Font.Medium
             font.family: "Microsoft YaHei UI"

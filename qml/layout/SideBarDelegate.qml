@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 
 Rectangle {
     id: root
@@ -42,17 +43,17 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 16
         anchors.verticalCenter: parent.verticalCenter
-        height: 24
+        height: 28
         spacing: 12
 
         // 图标
         Image {
             id: iconImg
-            width: 22; height: 22
+            width: 28; height: 28
             anchors.verticalCenter: parent.verticalCenter
             source: iconImage
-            sourceSize.width: 44
-            sourceSize.height: 44
+            sourceSize.width: 56
+            sourceSize.height: 56
             fillMode: Image.PreserveAspectFit
             smooth: true
             opacity: {

@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 
 //=============================================================================
 // SuretyTooltip — 暗色主题浮层提示
@@ -45,10 +46,10 @@ Rectangle {
     height: label.implicitHeight + 16 + (arrowVisible ? 5 : 0)
 
     // ---- 视觉 ----------------------------------------------------
-    color: "#21262d"
+    color: Theme.border_default
     radius: 6
     border.width: 1
-    border.color: "#30363d"
+    border.color: Theme.border_standard
 
     // 弱阴影 (外发光替代，避免复杂多层)
     layer.enabled: true
@@ -77,7 +78,7 @@ Rectangle {
             ? (root.placement === Tooltip._top ? -2 : 2)
             : 0
         text: "Tooltip"             // 设计预览默认值，外部通过 alias 覆盖
-        color: "#e6edf3"
+        color: Theme.text_primary
         font.pixelSize: 14
         font.family: "Microsoft YaHei UI"
         elide: Text.ElideRight
@@ -101,7 +102,7 @@ Rectangle {
         onPaint: {
             let ctx = getContext("2d")
             ctx.clearRect(0, 0, width, height)
-            ctx.fillStyle = "#21262d"
+            ctx.fillStyle = Theme.border_default
             ctx.beginPath()
             if (root.placement === Tooltip._top) {
                 ctx.moveTo(0, 0)
@@ -116,7 +117,7 @@ Rectangle {
             ctx.fill()
 
             // 左侧边框
-            ctx.strokeStyle = "#30363d"
+            ctx.strokeStyle = Theme.border_standard
             ctx.lineWidth = 1
             ctx.beginPath()
             if (root.placement === Tooltip._top) {

@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 
@@ -15,20 +16,22 @@ Rectangle {
     property int    delegateIndex:  -1
     property string delegateName:   ""
     property string delegateType:   ""
-    property color  delegateColor:  "#ffffff"
+    property color  delegateColor:  Theme.text_bright
     property string delegateVersion: ""
     property bool   delegateSelected: false
     property bool   hasSubscription: false
+    property bool   showDelete: true
 
     signal clicked()
+    signal deleteRequested(int index)
 
     // ── 外观 ────────────────────────────────────────
     color: {
-        if (delegateSelected) return "#1a2332"
-        if (hoverArea.containsMouse) return "#0d1117"
+        if (delegateSelected) return Theme.selected_bg
+        if (hoverArea.containsMouse) return Theme.bg_page
         return "transparent"
     }
-    border.color: delegateSelected ? "#1f6feb" : "transparent"
+    border.color: delegateSelected ? Theme.accent : "transparent"
     border.width: delegateSelected ? 1 : 0
 
     Behavior on color       { ColorAnimation { duration: 150; easing.type: Easing.OutCubic } }
@@ -47,22 +50,36 @@ Rectangle {
     RowLayout {
         anchors.fill: parent
         anchors.margins: 10
-        spacing: 12
+        spacing: 0
 
-        // 头像
-        Rectangle {
-            Layout.preferredWidth: 36; Layout.preferredHeight: 36
-            radius: 8
-            color: Qt.rgba(delegateColor.r, delegateColor.g, delegateColor.b, 0.18)
+        // 删除按钮 — 委托 hover 时滑出
+        Item {
+            id: delBtn
+            Layout.preferredWidth: showDelete && (hoverArea.containsMouse || delMouse.containsMouse) ? 30 : 0
+            Layout.preferredHeight: parent.height
+            Layout.rightMargin: 8
+            Layout.alignment: Qt.AlignVCenter
+            clip: true
+            Behavior on Layout.preferredWidth { NumberAnimation { duration: 150; easing.type: Easing.OutCubic } }
 
-            Text {
+            Image {
                 anchors.centerIn: parent
-                text: delegateName.charAt(0)
-                color: delegateColor
-                font.pixelSize: 20; font.weight: Font.Bold
-                font.family: "JetBrains Mono"
+                source: "qrc:/qml/images/delete.svg"
+                width: 16; height: 16
+                opacity: delMouse.containsMouse ? 1.0 : 0.4
+                Behavior on opacity { NumberAnimation { duration: 120 } }
+            }
+
+            MouseArea {
+                id: delMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: assetDelegate.deleteRequested(delegateIndex)
             }
         }
+
+        
 
         Column {
             Layout.fillWidth: true
@@ -77,7 +94,7 @@ Rectangle {
                 Text {
                     width: parent.width - (hasSubscription ? subBadge.width + 6 : 0)
                     text: delegateName
-                    color: "#e6edf3"
+                    color: Theme.text_primary
                     font.pixelSize: 18; font.weight: Font.DemiBold
                     font.family: "Microsoft YaHei UI"
                     elide: Text.ElideRight
@@ -89,11 +106,11 @@ Rectangle {
                     height: 18
                     width: 28
                     radius: 4
-                    color: "#1f6feb"
+                    color: Theme.accent
                     Text {
                         anchors.centerIn: parent
                         text: "SUB"
-                        color: "#fff"
+                        color: Theme.text_bright
                         font.pixelSize: 10; font.weight: Font.Bold
                         font.family: "JetBrains Mono"
                     }
@@ -108,12 +125,12 @@ Rectangle {
                     height: 18
                     width: typeText.implicitWidth + 10
                     radius: 4
-                    color: Qt.rgba(delegateColor.r, delegateColor.g, delegateColor.b, 0.15)
+                    color: Theme.tag_preset_bg
                     Text {
                         id: typeText
                         anchors.centerIn: parent
                         text: delegateType
-                        color: delegateColor
+                        color: Theme.tag_preset_fg
                         font.pixelSize: 14; font.weight: Font.Bold
                         font.family: "JetBrains Mono"
                     }
@@ -121,7 +138,7 @@ Rectangle {
 
                 Text {
                     text: "v" + delegateVersion
-                    color: "#6e7681"
+                    color: Theme.text_hint
                     font.pixelSize: 14
                     font.family: "JetBrains Mono"
                     anchors.verticalCenter: parent.verticalCenter

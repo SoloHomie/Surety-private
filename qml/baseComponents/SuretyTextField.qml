@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 
 Rectangle {
     id: root
@@ -27,7 +28,7 @@ Rectangle {
         anchors.top: parent.top
         visible: root.label !== ""
         text: root.label
-        color: "#8b949e"
+        color: Theme.text_secondary
         font.pixelSize: 16
         font.weight: Font.Bold
         font.family: "JetBrains Mono"
@@ -42,13 +43,13 @@ Rectangle {
         anchors.topMargin: labelText.visible ? 6 : 0
         height: 44
         radius: 8
-        color: inputField.readOnly ? "#0a0e13" : "#0d1117"
+        color: inputField.readOnly ? Theme.input_readonly_bg : Theme.bg_page
         border.width: 1
         border.color: {
-            if (root.isError)               return "#f85149"
-            if (inputField.activeFocus)     return "#1f6feb"
-            if (hoverArea.containsMouse)    return "#30363d"
-            return "#21262d"
+            if (root.isError)               return Theme.danger_fg
+            if (inputField.activeFocus)     return Theme.accent
+            if (hoverArea.containsMouse)    return Theme.border_standard
+            return Theme.border_default
         }
         Behavior on border.color { ColorAnimation { duration: 200; easing.type: Easing.OutCubic } }
 
@@ -59,7 +60,7 @@ Rectangle {
             radius: parent.radius + 2
             color: "transparent"
             border.width: 2
-            border.color: root.isError ? "#f85149" : "#1f6feb"
+            border.color: root.isError ? Theme.danger_fg : Theme.accent
             opacity: (inputField.activeFocus || root.isError) ? 0.22 : 0.0
             visible: opacity > 0.0
             Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
@@ -80,7 +81,7 @@ Rectangle {
             anchors.rightMargin: 14
             verticalAlignment: Text.AlignVCenter
             text: root.placeholder
-            color: "#484f58"
+            color: Theme.text_disabled
             font: inputField.font
             elide: Text.ElideRight
             visible: inputField.text === "" && !inputField.activeFocus && !inputField.readOnly
@@ -92,15 +93,15 @@ Rectangle {
             anchors.fill: parent
             anchors.leftMargin: 14
             anchors.rightMargin: 14
-            color: readOnly ? "#6e7681" : "#e6edf3"
+            color: readOnly ? Theme.text_hint : Theme.text_primary
             font.pixelSize: 18
             font.family: "Microsoft YaHei UI"
             verticalAlignment: TextInput.AlignVCenter
             clip: true
             selectByMouse: true
             activeFocusOnPress: !readOnly
-            selectionColor: "#1f6feb"
-            selectedTextColor: "#ffffff"
+            selectionColor: Theme.accent
+            selectedTextColor: Theme.text_bright
             cursorVisible: activeFocus
 
             onAccepted: root.accepted()
@@ -121,7 +122,7 @@ Rectangle {
         anchors.topMargin: 4
         visible: root.isError
         text: "Invalid input"
-        color: "#f85149"
+        color: Theme.danger_fg
         font.pixelSize: 14
         font.family: "JetBrains Mono"
     }

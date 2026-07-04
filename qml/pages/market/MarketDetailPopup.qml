@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
@@ -18,17 +19,16 @@ Popup {
     property string itemName:     ""
     property string itemType:     ""
     property string itemIcon:     ""
-    property color  itemColor:    "#58A6FF"
+    property color  itemColor:    Theme.accent_text
     property string itemAuthor:   ""
     property string description:  ""
     property string price:        ""
-    property string pricingModel: "perCall"
+    property string pricingModel: "once"
+    property string version:      "1.0"
+    property int    durationDays: 0
     property int    callCount:    0
-    property real   rating:       0.0
-    property bool   isFavorited:  false
 
     signal callRequested()
-    signal favorited()
 
     // 当前选中的定价模式
     property string selectedPricing: root.pricingModel
@@ -44,8 +44,8 @@ Popup {
     }
 
     background: Rectangle {
-        radius: 16; color: "#161b22"
-        border.width: 1; border.color: "#30363d"
+        radius: 16; color: Theme.bg_card
+        border.width: 1; border.color: Theme.border_standard
     }
 
     contentItem: ColumnLayout {
@@ -62,7 +62,7 @@ Popup {
                 anchors.leftMargin: 20; anchors.rightMargin: 12
 
                 Text {
-                    text: root.itemName; color: "#e6edf3"
+                    text: root.itemName; color: Theme.text_primary
                     font.pixelSize: 22; font.weight: Font.DemiBold
                     font.family: "Microsoft YaHei UI"
                     Layout.fillWidth: true
@@ -74,7 +74,7 @@ Popup {
             }
         }
 
-        Rectangle { Layout.fillWidth: true; height: 1; color: "#21262d" }
+        Rectangle { Layout.fillWidth: true; height: 1; color: Theme.border_default }
 
         // ── 内容 ──
         Flickable {
@@ -106,36 +106,22 @@ Popup {
                     }
                     ColumnLayout {
                         spacing: 4
-                        Row {
-                            spacing: 8
-                            Rectangle {
-                                height: 22; radius: 6; width: tLabel.implicitWidth + 14
-                                color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.15)
-                                Text { id: tLabel; anchors.centerIn: parent; text: root.itemType
-                                    color: root.itemColor; font.pixelSize: 14; font.weight: Font.Bold
-                                    font.family: "JetBrains Mono" }
-                            }
-                            Text { visible: root.itemAuthor !== ""; text: root.itemAuthor
-                                color: "#6e7681"; font.pixelSize: 14; font.family: "Microsoft YaHei UI" }
+                        // 类型标签
+                        Rectangle {
+                            height: 22; radius: 6
+                            width: tLabel.implicitWidth + 14
+                            color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.15)
+                            Text { id: tLabel; anchors.centerIn: parent; text: root.itemType
+                                color: root.itemColor; font.pixelSize: 14; font.weight: Font.Bold
+                                font.family: "JetBrains Mono" }
                         }
+                        // 卖家 + 版本
                         Row {
                             spacing: 12
-                            Row {
-                                spacing: 2
-                                Repeater {
-                                    model: 5
-                                    Text {
-                                        text: index < Math.floor(root.rating) ? "★" : "☆"
-                                        color: index < root.rating ? "#d29922" : "#484f58"
-                                        font.pixelSize: 15
-                                    }
-                                }
-                            }
-                            Text {
-                                visible: root.callCount > 0
-                                text: root.callCount + " 次调用"; color: "#6e7681"
-                                font.pixelSize: 14; font.family: "JetBrains Mono"
-                            }
+                            Text { visible: root.itemAuthor !== ""; text: "@" + root.itemAuthor
+                                color: Theme.text_secondary; font.pixelSize: 14; font.family: "JetBrains Mono" }
+                            Text { visible: root.version !== ""; text: "v" + root.version
+                                color: Theme.text_hint; font.pixelSize: 13; font.family: "JetBrains Mono" }
                         }
                     }
                 }
@@ -143,55 +129,44 @@ Popup {
                 // ── 描述 ──
                 Text {
                     Layout.fillWidth: true
-                    text: root.description; color: "#c9d1d9"
+                    text: root.description; color: Theme.text_primary
                     font.pixelSize: 16; font.family: "Microsoft YaHei UI"
                     wrapMode: Text.WordWrap; lineHeight: 1.5
                 }
 
-                Rectangle { Layout.fillWidth: true; height: 1; color: "#21262d" }
+                Rectangle { Layout.fillWidth: true; height: 1; color: Theme.border_default }
 
-                // ── 定价模式选择 ──
+                // ── 定价方案 ──
                 Text {
-                    text: "定价模式"; color: "#e6edf3"
+                    text: "定价方案"; color: Theme.text_primary
                     font.pixelSize: 18; font.weight: Font.DemiBold
                     font.family: "Microsoft YaHei UI"
                 }
 
-                RowLayout {
-                    spacing: 10
-                    Repeater {
-                        model: [
-                            { mode: "once",      label: "一次性付费", desc: "买断永久使用" },
-                            { mode: "perCall",   label: "按次调用",   desc: "每次调用计费" },
-                            { mode: "subscribe", label: "订阅服务",   desc: "按月自动续费" },
-                        ]
+                // 定价模式显示（来自服务端数据）
+                Rectangle {
+                    Layout.fillWidth: true; Layout.preferredHeight: 64
+                    radius: 10
+                    color: Theme.bg_page
+                    border.width: 1; border.color: Theme.border_standard
+
+                    RowLayout {
+                        anchors.centerIn: parent; spacing: 16
                         Rectangle {
-                            Layout.fillWidth: true; Layout.preferredHeight: 64
-                            radius: 10
-                            color: root.selectedPricing === modelData.mode ? "#0d419d" : "#0d1117"
-                            border.width: root.selectedPricing === modelData.mode ? 1 : 1
-                            border.color: root.selectedPricing === modelData.mode ? "#1f6feb" : "#21262d"
-                            Behavior on color { ColorAnimation { duration: 150 } }
-
-                            MouseArea {
-                                anchors.fill: parent; cursorShape: Qt.PointingHandCursor
-                                onClicked: root.selectedPricing = modelData.mode
-                            }
-
-                            ColumnLayout {
-                                anchors.centerIn: parent; spacing: 4
-                                Text {
-                                    text: modelData.label; color: "#e6edf3"
-                                    font.pixelSize: 16; font.weight: Font.DemiBold
-                                    font.family: "Microsoft YaHei UI"
-                                    Layout.alignment: Qt.AlignHCenter
-                                }
-                                Text {
-                                    text: modelData.desc; color: "#8b949e"
-                                    font.pixelSize: 14; font.family: "Microsoft YaHei UI"
-                                    Layout.alignment: Qt.AlignHCenter
-                                }
-                            }
+                            height: 22; radius: 6
+                            width: modelBadge.implicitWidth + 14
+                            color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.15)
+                            Text { id: modelBadge; anchors.centerIn: parent
+                                text: root.pricingModel === "subscription" ? "订阅" : "买断"
+                                color: root.itemColor; font.pixelSize: 14; font.weight: Font.Bold
+                                font.family: "JetBrains Mono" }
+                        }
+                        Text {
+                            text: root.pricingModel === "subscription"
+                                  ? "每 " + root.durationDays + " 天自动续费"
+                                  : "一次付费，永久拥有"
+                            color: Theme.text_secondary; font.pixelSize: 15
+                            font.family: "Microsoft YaHei UI"
                         }
                     }
                 }
@@ -199,18 +174,22 @@ Popup {
                 // ── 价格显示 ──
                 RowLayout {
                     Layout.fillWidth: true
-                    Text {
-                        text: root.price === "Free" ? "免费" : (root.price + " ETH")
-                        color: "#e6edf3"; font.pixelSize: 32; font.weight: Font.Bold
-                        font.family: "JetBrains Mono"
-                    }
-                    Text {
-                        visible: root.price !== "Free" && root.price !== ""
-                        text: root.selectedPricing === "once" ? "一次性" :
-                              (root.selectedPricing === "subscribe" ? "/ 月" : "/ 次")
-                        color: "#6e7681"; font.pixelSize: 15
-                        font.family: "Microsoft YaHei UI"
-                        anchors.verticalCenter: parent.verticalCenter
+                    ColumnLayout {
+                        spacing: 2
+                        Text {
+                            text: {
+                                var p = parseFloat(root.price) || 0
+                                return p > 0 ? "¥" + p.toFixed(2) : "免费"
+                            }
+                            color: Theme.text_primary; font.pixelSize: 32; font.weight: Font.Bold
+                            font.family: "JetBrains Mono"
+                        }
+                        Text {
+                            visible: root.pricingModel === "subscription" && (parseFloat(root.price) || 0) > 0
+                            text: "/ " + root.durationDays + " 天"
+                            color: Theme.text_secondary; font.pixelSize: 14
+                            font.family: "JetBrains Mono"
+                        }
                     }
                     Item { Layout.fillWidth: true }
                     SuretyBtn {

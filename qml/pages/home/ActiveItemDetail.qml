@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 
 //=============================================================================
@@ -8,10 +9,10 @@ Rectangle {
     id: root
     implicitWidth: 360
     implicitHeight: detailColumn.implicitHeight + 32
-    color: "#0d1117"
+    color: Theme.bg_page
     radius: 10
     border.width: 1
-    border.color: "#30363d"
+    border.color: Theme.border_standard
 
     // ── 外部属性 ──
     property string message: ""
@@ -29,7 +30,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             text: root.message || "暂无详细信息。"
-            color: root.message !== "" ? "#c9d1d9" : "#484f58"
+            color: root.message !== "" ? Theme.text_primary : Theme.text_disabled
             font.pixelSize: 15
             font.family: "Microsoft YaHei UI"
             wrapMode: Text.WordWrap

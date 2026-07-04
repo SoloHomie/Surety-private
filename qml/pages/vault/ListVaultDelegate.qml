@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import "../../baseComponents"
 
 Rectangle {
@@ -39,7 +40,7 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             text: root.assetIcon
-            color: "#0d1117"
+            color: Theme.bg_page
             font.pixelSize: 16
             font.weight: Font.Bold
             font.family: "JetBrains Mono"
@@ -55,7 +56,7 @@ Rectangle {
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         text: root.assetName
-        color: "#e6edf3"
+        color: Theme.text_primary
         font.pixelSize: 16
         font.weight: Font.Medium
         font.family: "Microsoft YaHei UI"

@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import Surety 1.0
@@ -18,7 +19,7 @@ ColumnLayout {
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredWidth: Api.avatarUrl ? 80 : 0
         Layout.preferredHeight: Api.avatarUrl ? 80 : 0
-        radius: 40; color: "#1f6feb"
+        radius: 40; color: Theme.accent
         clip: true
         visible: Api.avatarUrl !== ""
 
@@ -31,7 +32,7 @@ ColumnLayout {
         Text {
             anchors.centerIn: parent
             text: Api.username ? Api.username.charAt(0).toUpperCase() : "U"
-            color: "#fff"; font.pixelSize: 36; font.weight: Font.Bold
+            color: Theme.text_bright; font.pixelSize: 36; font.weight: Font.Bold
             font.family: "JetBrains Mono"
             visible: !parent.parent.visible || parent.parent.width < 1
         }
@@ -41,8 +42,8 @@ ColumnLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: infoColumn.implicitHeight + 32
-        color: "#161b22"; radius: 12
-        border.color: "#21262d"; border.width: 1
+        color: Theme.bg_card; radius: 12
+        border.color: Theme.border_default; border.width: 1
 
         ColumnLayout {
             id: infoColumn
@@ -51,17 +52,17 @@ ColumnLayout {
             anchors.margins: 20
             spacing: 14
 
-            InfoRow { label: "用户名"; value: Api.username || "---" }
-            InfoRow { label: "邮箱";   value: Api.email    || "---" }
-            InfoRow { label: "状态";   value: "已登录"; valueColor: "#3fb950" }
+            InfoRow { label: qsTr("用户名"); value: Api.username || "---" }
+            InfoRow { label: qsTr("邮箱");   value: Api.email    || "---" }
+            InfoRow { label: qsTr("状态");   value: qsTr("已登录"); valueColor: Theme.success_fg }
         }
     }
 
     // ── 关联第三方账号 ──
     Text {
         Layout.alignment: Qt.AlignHCenter
-        text: "关联第三方账号 ›"
-        color: "#58a6ff"; font.pixelSize: 16
+        text: qsTr("关联第三方账号") + " ›"
+        color: Theme.accent_text; font.pixelSize: 16
         font.family: "Microsoft YaHei UI"
         MouseArea {
             anchors.fill: parent; cursorShape: Qt.PointingHandCursor
@@ -74,7 +75,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.topMargin: 8
         Layout.preferredHeight: 48
-        text: "退出登录"
+        text: qsTr("退出登录")
         variant: "danger"
         font.pixelSize: 17; font.weight: Font.Bold
         onClicked: root.logoutClicked()
@@ -83,9 +84,9 @@ ColumnLayout {
     component InfoRow: RowLayout {
         property string label: ""
         property string value: ""
-        property color valueColor: "#c9d1d9"
+        property color valueColor: Theme.text_primary
         Layout.fillWidth: true; spacing: 12
-        Text { Layout.preferredWidth: 80; text: label; color: "#8b949e"; font.pixelSize: 18; font.family: "Microsoft YaHei UI" }
-        Text { Layout.fillWidth: true; text: value; color: valueColor; font.pixelSize: 18; font.weight: Font.DemiBold; font.family: "Microsoft YaHei UI"; elide: Text.ElideRight }
+        Text { Layout.preferredWidth: implicitWidth + 16; text: label; color: Theme.text_secondary; font.pixelSize: 16; font.family: "Microsoft YaHei UI" }
+        Text { Layout.fillWidth: true; text: value; color: valueColor; font.pixelSize: 16; font.weight: Font.DemiBold; font.family: "Microsoft YaHei UI"; elide: Text.ElideRight }
     }
 }

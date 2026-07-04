@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
@@ -19,30 +20,45 @@ RowLayout {
         segmentRadius: 8
         fontSize: 14
         minimumWidth: 160
-        model: [
-            { label: "个人" },
-            { label: "订阅" }
-        ]
+        model: tabModel
         onTagSelected: function(idx) { root.tabChanged(idx) }
+    }
+
+    property var tabModel: [
+        { label: qsTr("个人") },
+        { label: qsTr("订阅") },
+        { label: qsTr("本地") }
+    ]
+
+    Connections {
+        target: Lang
+        function onLanguageChanged() { tabModel = [
+            { label: qsTr("个人") },
+            { label: qsTr("订阅") },
+            { label: qsTr("本地") }
+        ]}
     }
 
     Item { Layout.fillWidth: true }
 
-    Button {
+    Item {
         id: manageBtn
-        rightPadding: 0; leftPadding: 0
-        bottomPadding: 0; topPadding: 0
         Layout.preferredWidth: 36; Layout.preferredHeight: 36
-        flat: true
 
-        icon.source: "qrc:/qml/images/组管理.svg"
-        icon.width: 20; icon.height: 20
-        icon.color: hovered ? "#e6edf3" : "#8b949e"
-
-        background: Rectangle {
-            anchors.fill: parent; radius: 6
-            color: manageBtn.hovered ? "#21262d" : "transparent"
+        Image {
+            anchors.centerIn: parent
+            source: "qrc:/qml/images/组管理.svg"
+            width: 22; height: 22
+            opacity: manageMouse.containsMouse ? 1.0 : 0.65
+            Behavior on opacity { NumberAnimation { duration: 180 } }
         }
-        onClicked: root.manageClicked()
+
+        MouseArea {
+            id: manageMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: root.manageClicked()
+        }
     }
 }

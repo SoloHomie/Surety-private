@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 
 Rectangle {
     id: root
@@ -6,7 +7,7 @@ Rectangle {
     radius: 12
 
     property string name: ""
-    property color accentColor: "#58A6FF"
+    property color accentColor: Theme.accent_text
     property real bgOpacity: 0.12
     property int fontSize: 28
     property string fontFamily: "Arial"

@@ -1,13 +1,15 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
+import "../../toast"
 
 Rectangle {
     id: root
-    color: "#010409"
+    color: Theme.bg_input
     radius: 12
-    border.color: "#21262d"
+    border.color: Theme.border_default
     border.width: 1
     clip: true
 
@@ -20,6 +22,7 @@ Rectangle {
     property alias  subPrice:      subPriceField.text
     property alias  subDuration:   subDurationField.text
     property string titleText:     "---"
+    property string saveBtnText:   "保存资产"
     property bool   isReadOnly:    false    // 订阅资产禁止编辑
 
     readonly property string selectedType: {
@@ -27,23 +30,27 @@ Rectangle {
         return typeModel.get(typeSelector.selectedIndex).label
     }
     readonly property string selectedTypeCode: {
-        if (typeSelector.selectedIndex < 0 || typeSelector.selectedIndex >= typeModel.count) return "#1f6feb"
+        if (typeSelector.selectedIndex < 0 || typeSelector.selectedIndex >= typeModel.count) return Theme.accent
         return typeModel.get(typeSelector.selectedIndex).code
     }
 
     signal saveClicked()
 
+    // 按名称选择类型（找不到则自动添加为自定义类型）
+    function selectType(typeName) {
+        for (var i = 0; i < typeModel.count; i++) {
+            if (typeModel.get(i).label === typeName) { typeSelector.selectedIndex = i; return }
+        }
+        if (typeName && typeName !== "") {
+            typeModel.append({ label: typeName, code: _colorFor(typeName) })
+            typeSelector.selectedIndex = typeModel.count - 1
+        }
+    }
+
     // ═══════════════════════════════════════════════
     //  颜色工具
     // ═══════════════════════════════════════════════
-    readonly property var _palette: ["#C89B3C", "#34D399", "#58A6FF", "#A371F7", "#F59E0B", "#F85149", "#00BCD4", "#FF7043"]
-
-    function _colorFor(name) {
-        var hash = 0
-        for (var i = 0; i < name.length; i++)
-            hash = name.charCodeAt(i) + ((hash << 5) - hash)
-        return _palette[Math.abs(hash) % _palette.length]
-    }
+    function _colorFor(name) { return "#a371f7" }
 
     // ═══════════════════════════════════════════════
     //  自定义类型
@@ -97,9 +104,7 @@ Rectangle {
         nameField.text    = item.name    || ""
         versionField.text = item.version || ""
         descField.text    = item.desc   || ""
-        oncePriceField.text = ""
-        subPriceField.text  = ""
-        subDurationField.text = ""
+        // 定价由 VaultPage._selectAsset 设置，这里不做清空
     }
 
     // =========================================================================
@@ -124,12 +129,13 @@ Rectangle {
             id: detailColumn
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.rightMargin: 12
             anchors.top: parent.top
             spacing: 20
 
             // ── 标题 ──
             Text {
-                color: "#e6edf3"
+                color: Theme.text_primary
                 text: root.titleText
                 font.pixelSize: 28
                 font.weight: Font.Bold
@@ -141,13 +147,13 @@ Rectangle {
             Rectangle {
                 Layout.fillWidth: true
                 height: 1
-                color: "#21262d"
+                color: Theme.border_default
             }
 
             SuretyTextField {
                 id: nameField
                 Layout.fillWidth: true
-                placeholder: "输入资产名称"
+                placeholder: qsTr("资产名称")
                 enabled: !root.isReadOnly
             }
 
@@ -160,11 +166,11 @@ Rectangle {
                 enabled: !root.isReadOnly
                 model: ListModel {
                     id: typeModel
-                    ListElement { label: "知识包"; code: "#C89B3C" }
-                    ListElement { label: "脚本";   code: "#34D399" }
-                    ListElement { label: "工具";   code: "#A371F7" }
-                    ListElement { label: "模型";   code: "#58A6FF" }
-                    ListElement { label: "工作流"; code: "#F59E0B" }
+                    ListElement { label: "Skill"; code: "#58a6ff" }
+                    ListElement { label: "Script"; code: "#58a6ff" }
+                    ListElement { label: "Tool"; code: "#58a6ff" }
+                    ListElement { label: "Model"; code: "#58a6ff" }
+                    ListElement { label: "Workflow"; code: "#58a6ff" }
                 }
             }
 
@@ -174,22 +180,15 @@ Rectangle {
                 Layout.preferredHeight: 38
                 Layout.preferredWidth: readonlyTypeText.implicitWidth + 28
                 radius: 8
-                color: Qt.rgba(
-                    typeSelector.selectedIndex >= 0 && typeSelector.selectedIndex < typeModel.count
-                        ? typeModel.get(typeSelector.selectedIndex).code : "#1f6feb",
-                    0.15)
+                color: Theme.tag_preset_bg
                 border.width: 1
-                border.color: Qt.rgba(
-                    typeSelector.selectedIndex >= 0 && typeSelector.selectedIndex < typeModel.count
-                        ? typeModel.get(typeSelector.selectedIndex).code : "#1f6feb",
-                    0.4)
+                border.color: Theme.accent_text
 
                 Text {
                     id: readonlyTypeText
                     anchors.centerIn: parent
                     text: root.selectedType || "类型"
-                    color: typeSelector.selectedIndex >= 0 && typeSelector.selectedIndex < typeModel.count
-                        ? typeModel.get(typeSelector.selectedIndex).code : "#1f6feb"
+                    color: Theme.tag_preset_fg
                     font.pixelSize: 15; font.weight: Font.Bold
                     font.family: "JetBrains Mono"
                 }
@@ -220,7 +219,7 @@ Rectangle {
             SuretyBtn {
                 visible: !customTypeRow.visible && !root.isReadOnly
                 enabled: !root.isReadOnly
-                text: "+ 自定义类型"
+                text: qsTr("+ 自定义类型")
                 width: 130
                 height: 32
                 variant: "outline"
@@ -239,19 +238,19 @@ Rectangle {
                     model: typeModel
 
                     delegate: Rectangle {
-                        visible: index >= 5          // 仅自定义类型（前 5 个为预设）
+                        visible: index >= 5
                         height: 30; radius: 7
                         width: chipLabel.implicitWidth + 36
-                        color: "#161b22"
+                        color: "#1e1e3f"
                         border.width: 1
-                        border.color: model.code
+                        border.color: "#a371f7"
 
                         Text {
                             id: chipLabel
                             anchors.left: parent.left; anchors.leftMargin: 10
                             anchors.verticalCenter: parent.verticalCenter
                             text: model.label
-                            color: model.code
+                            color: "#a371f7"
                             font.pixelSize: 14; font.weight: Font.DemiBold
                             font.family: "Microsoft YaHei UI"
                         }
@@ -260,11 +259,11 @@ Rectangle {
                             anchors.right: parent.right; anchors.rightMargin: 4
                             anchors.verticalCenter: parent.verticalCenter
                             width: 20; height: 20; radius: 10
-                            color: chipCloseMA.containsMouse ? "#30363d" : "transparent"
+                            color: chipCloseMA.containsMouse ? Theme.border_standard : "transparent"
 
                             Text {
                                 anchors.centerIn: parent
-                                text: "×"; color: "#8b949e"
+                                text: "×"; color: Theme.text_secondary
                                 font.pixelSize: 16; font.weight: Font.Bold
                             }
 
@@ -293,29 +292,28 @@ Rectangle {
                 SuretyTextField {
                     id: versionField
                     Layout.fillWidth: true
-                    placeholder: "版本号"
+                    placeholder: qsTr("版本号")
                     enabled: !root.isReadOnly
                 }
             }
 
-            // ── 定价设置（仅非订阅资产可见）─────────────
+            // 隐藏：对齐旧别名，MVP 只用订阅价
+            Item { visible: false
+                property alias text: oncePriceField.text
+                SuretyTextField { id: oncePriceField; text: "" }
+            }
+
+            // ── 订阅定价 ──
             Rectangle {
                 visible: !root.isReadOnly
-                Layout.fillWidth: true
-                height: 1
-                color: "#21262d"
+                Layout.fillWidth: true; height: 1; color: Theme.border_default
             }
-
             Text {
                 visible: !root.isReadOnly
-                text: "定价设置"
-                color: "#e6edf3"
-                font.pixelSize: 16
-                font.weight: Font.Bold
+                text: qsTr("订阅定价")
+                color: Theme.text_primary; font.pixelSize: 16; font.weight: Font.Bold
                 font.family: "Microsoft YaHei UI"
             }
-
-            // 永久买断
             RowLayout {
                 visible: !root.isReadOnly
                 Layout.fillWidth: true
@@ -324,47 +322,14 @@ Rectangle {
                 Rectangle {
                     Layout.preferredWidth: 80
                     Layout.preferredHeight: 28
+                    Layout.fillHeight: true
                     radius: 6
-                    color: "#1a2332"
-                    Text {
-                        anchors.centerIn: parent
-                        text: "永久买断"
-                        color: "#58A6FF"
-                        font.pixelSize: 13; font.weight: Font.Bold
-                        font.family: "Microsoft YaHei UI"
-                    }
-                }
-
-                SuretyTextField {
-                    id: oncePriceField
-                    Layout.fillWidth: true
-                    placeholder: "输入价格（如 299）"
-                }
-
-                Text {
-                    text: "¥"
-                    color: "#8b949e"
-                    font.pixelSize: 16
-                    font.family: "JetBrains Mono"
-                }
-            }
-
-            // 订阅
-            RowLayout {
-                visible: !root.isReadOnly
-                Layout.fillWidth: true
-                spacing: 12
-
-                Rectangle {
-                    Layout.preferredWidth: 80
-                    Layout.preferredHeight: 28
-                    radius: 6
-                    color: "#1a2332"
+                    color: Theme.selected_bg
                     Text {
                         anchors.centerIn: parent
                         text: "订阅"
-                        color: "#3fb950"
-                        font.pixelSize: 13; font.weight: Font.Bold
+                        color: Theme.success_fg
+                        font.pixelSize: 15; font.weight: Font.Bold
                         font.family: "Microsoft YaHei UI"
                     }
                 }
@@ -372,12 +337,12 @@ Rectangle {
                 SuretyTextField {
                     id: subPriceField
                     Layout.fillWidth: true
-                    placeholder: "输入价格（如 29）"
+                    placeholder: qsTr("输入价格")
                 }
 
                 Text {
                     text: "¥ /"
-                    color: "#8b949e"
+                    color: Theme.text_secondary
                     font.pixelSize: 14
                     font.family: "JetBrains Mono"
                 }
@@ -393,7 +358,7 @@ Rectangle {
                 id: descField
                 Layout.fillWidth: true
                 enabled: !root.isReadOnly
-                placeholder: "请输入资产相关信息..."
+                placeholder: qsTr("请输入资产相关信息...")
                 minHeight: 140
             }
 
@@ -419,7 +384,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 1
-            color: "#21262d"
+            color: Theme.border_default
         }
 
         SuretyBtn {
@@ -428,7 +393,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             width: 120; height: 40
-            text: "保存资产"
+            text: qsTr(root.saveBtnText)
             variant: "primary"
             font: Qt.font({
                 family: "Microsoft YaHei UI",
@@ -438,4 +403,5 @@ Rectangle {
             onClicked: root.saveClicked()
         }
     }
+
 }

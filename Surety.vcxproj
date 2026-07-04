@@ -37,14 +37,14 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.11.1_msvc2022_64</QtInstall>
-    <QtModules>core;network;qml;quick;quicklayouts</QtModules>
+    <QtModules>core;network;qml;quick;quicklayouts;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
     <QtQMLDebugEnable>true</QtQMLDebugEnable>
     <QtPlugin>false</QtPlugin>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.11.1_msvc2022_64</QtInstall>
-    <QtModules>core;network;qml;quick;quicklayouts</QtModules>
+    <QtModules>core;network;qml;quick;quicklayouts;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -98,9 +98,17 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\network\ApiClient.cpp" />
-    <ClCompile Include="src\service\AuthService.cpp" />
-    <ClCompile Include="src\service\AssetService.cpp" />
-    <ClCompile Include="src\service\OAuthServer.cpp" />
+    <ClCompile Include="src\services\auth\AuthService.cpp" />
+    <ClCompile Include="src\services\asset\AssetService.cpp" />
+    <ClCompile Include="src\services\auth\OAuthServer.cpp" />
+    <ClCompile Include="src\services\system\UserSettings.cpp" />
+    <ClCompile Include="src\services\asset\AssetWatcher.cpp" />
+    <ClCompile Include="src\services\system\SystemTray.cpp" />
+    <ClCompile Include="src\services\system\FileHelper.cpp" />
+    <ClCompile Include="src\services\system\MigrationWorker.cpp" />
+    <ClCompile Include="src\services\wallet\CryptoHelper.cpp" />
+    <ClCompile Include="src\services\wallet\SubscriptionStore.cpp" />
+    <ClCompile Include="src\services\system\LanguageManager.cpp" />
     <ClCompile Include="src\model\AssetListModel.cpp" />
     <ClCompile Include="src\model\MarketListModel.cpp" />
   </ItemGroup>
@@ -130,6 +138,7 @@
     <None Include="qml\images\home_icon.svg" />
     <None Include="qml\images\list_icon.svg" />
     <None Include="qml\images\market_icon.svg" />
+    <None Include="qml\images\market_new.svg" />
     <None Include="qml\images\QQ.svg" />
     <None Include="qml\images\settings_icon.svg" />
     <None Include="qml\images\surety-icon.svg" />
@@ -140,6 +149,7 @@
     <None Include="qml\images\toast-success.svg" />
     <None Include="qml\images\toast-warning.svg" />
     <None Include="qml\images\vault_icon.svg" />
+    <None Include="qml\images\vault_new.svg" />
     <None Include="qml\images\window-close.svg" />
     <None Include="qml\images\window-maximize.svg" />
     <None Include="qml\images\window-minimize.svg" />
@@ -180,6 +190,7 @@
     <None Include="qml\pages\settings\SettingsAdvanced.qml" />
     <None Include="qml\pages\settings\SettingsAppearance.qml" />
     <None Include="qml\pages\settings\SettingsBeta.qml" />
+    <None Include="qml\pages\settings\WalletPage.qml" />
     <None Include="qml\pages\settings\LoginSuccess.qml" />
     <None Include="qml\pages\settings\SettingsGeneral.qml" />
     <None Include="qml\pages\settings\SettingsNavBar.qml" />
@@ -191,9 +202,12 @@
     <None Include="qml\pages\vault\AssetListDelegate.qml" />
     <None Include="qml\pages\vault\AssetListHeader.qml" />
     <None Include="qml\pages\vault\AssetListPanel.qml" />
+    <None Include="qml\pages\vault\PersonalPage.qml" />
+    <None Include="qml\pages\vault\SubscribedPage.qml" />
+    <None Include="qml\pages\vault\LocalPage.qml" />
     <None Include="qml\pages\vault\ListVaultDelegate.qml" />
     <None Include="qml\pages\vault\ManageDrawer.qml" />
-    <None Include="qml\popups\UpdateContent.qml" />
+    <None Include="qml\dialogs\UpdateContent.qml" />
     <None Include="qml\themes\Theme.qml" />
     <None Include="qml\toast\qmldir" />
     <None Include="qml\toast\Toast.qml" />
@@ -205,13 +219,19 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\network\ApiClient.h" />
-    <QtMoc Include="src\service\AuthService.h" />
-    <QtMoc Include="src\service\AssetService.h" />
-    <QtMoc Include="src\service\OAuthServer.h" />
+    <QtMoc Include="src\services\auth\AuthService.h" />
+    <QtMoc Include="src\services\asset\AssetService.h" />
+    <QtMoc Include="src\services\auth\OAuthServer.h" />
+    <QtMoc Include="src\services\system\UserSettings.h" />
+    <QtMoc Include="src\services\asset\AssetWatcher.h" />
+    <QtMoc Include="src\services\system\SystemTray.h" />
+    <QtMoc Include="src\services\system\FileHelper.h" />
+    <QtMoc Include="src\services\system\MigrationWorker.h" />
+    <QtMoc Include="src\services\wallet\CryptoHelper.h" />
+    <QtMoc Include="src\services\wallet\SubscriptionStore.h" />
+    <QtMoc Include="src\services\system\LanguageManager.h" />
     <QtMoc Include="src\model\AssetListModel.h" />
     <QtMoc Include="src\model\MarketListModel.h" />
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

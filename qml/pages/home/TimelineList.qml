@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
@@ -15,7 +16,7 @@ import "../../baseComponents"
 //
 // 模型角色 (ListModel 示例):
 //   ListElement {
-//       color:    "#238636"          // 节点颜色
+//       color:    Theme.success          // 节点颜色
 //       title:    "审核通过"          // 标题
 //       time:     "2 hours ago"      // 时间
 //       message:  "..."              // 展开详情
@@ -57,7 +58,7 @@ ListView {
         itemWidth: timelineView.width
         showUpperLine: index !== 0
         showLowerLine: index !== timelineView.count - 1
-        color: modelData.color !== undefined ? modelData.color : (model ? model.color : "#8b949e")
+        color: modelData.color !== undefined ? modelData.color : (model ? model.color : Theme.text_secondary)
         title: modelData.title !== undefined ? modelData.title : (model ? model.title : "")
         time: modelData.time !== undefined ? modelData.time : (model ? model.time : "")
         message: modelData.message !== undefined ? modelData.message : (model ? model.message : "")

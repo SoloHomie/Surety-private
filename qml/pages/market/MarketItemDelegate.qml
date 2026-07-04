@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 import "../../baseComponents"
@@ -15,28 +16,30 @@ Rectangle {
     // ═══════════════════════════════════════════════
     //  外观
     // ═══════════════════════════════════════════════
-    property color cardBg:        "#0d1117"
-    property color cardBgHover:   "#161b22"
-    property color cardBorder:    "#21262d"
-    property color cardBorderHov: "#30363d"
-    property color cardBorderSel: "#1f6feb"
-    property color cardBgSel:     "#161b22"
-    property color titleColor:    "#e6edf3"
-    property color descColor:     "#8b949e"
-    property color statColor:     "#6e7681"
+    property color cardBg:        Theme.bg_page
+    property color cardBgHover:   Theme.bg_card
+    property color cardBorder:    Theme.border_default
+    property color cardBorderHov: Theme.border_standard
+    property color cardBorderSel: Theme.accent
+    property color cardBgSel:     Theme.bg_card
+    property color titleColor:    Theme.text_primary
+    property color descColor:     Theme.text_secondary
+    property color statColor:     Theme.text_hint
     // ═══════════════════════════════════════════════
     //  数据
     // ═══════════════════════════════════════════════
     property string itemName:     ""
     property string itemType:     ""
     property string itemIcon:     ""
-    property color  itemColor:    "#58A6FF"
+    property color  itemColor:    Theme.accent_text
     property string itemAuthor:   ""
     property string description:  ""
-    property string price:        ""
-    property string pricingModel: "perCall"
-    property int    callCount:    0
+    property double oncePrice:     0
+    property double subPrice:      0
+    property int    subDuration:   30
+    property int    callCount:     0
     property bool   isSelected:   false
+    property bool   isOwnAsset:   false
     property int    itemWidth:    460
 
     signal clicked()
@@ -133,10 +136,10 @@ Rectangle {
 
                 Rectangle {
                     height: 20; radius: 5; width: typeLabel.implicitWidth + 12
-                    color: Qt.rgba(root.itemColor.r, root.itemColor.g, root.itemColor.b, 0.15)
+                    color: Theme.tag_preset_bg
                     Text {
                         id: typeLabel; anchors.centerIn: parent
-                        text: root.itemType; color: root.itemColor
+                        text: root.itemType; color: Theme.tag_preset_fg
                         font.pixelSize: 14; font.weight: Font.Bold; font.family: "JetBrains Mono"
                     }
                 }
@@ -146,9 +149,32 @@ Rectangle {
                     text: root.callCount + " 次"; color: root.statColor
                     font.pixelSize: 14; font.family: "JetBrains Mono"
                 }
+
+                Rectangle {
+                    visible: root.isOwnAsset
+                    height: 20; radius: 5; width: ownBadge.implicitWidth + 12
+                    color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.15)
+                    Text {
+                        id: ownBadge; anchors.centerIn: parent
+                        text: "我的资产"; color: Theme.accent
+                        font.pixelSize: 13; font.weight: Font.Bold
+                        font.family: "Microsoft YaHei UI"
+                    }
+                }
             }
         }
 
-        // ── 操作区（预留，定价详情在 MarketDetailPopup 中展示）──
+        // ── 价格（仅订阅）──
+        ColumnLayout {
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            spacing: 2
+            Text {
+                visible: root.subPrice > 0
+                text: "¥" + root.subPrice.toFixed(0) + " / " + root.subDuration + "天"
+                color: root.titleColor; font.pixelSize: 20; font.weight: Font.Bold
+                font.family: "JetBrains Mono"
+                Layout.alignment: Qt.AlignRight
+            }
+        }
     }
 }

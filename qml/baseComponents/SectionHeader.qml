@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  SectionHeader — 设置页分节标题
@@ -7,7 +8,7 @@ Item {
     id: root
 
     property string title:     ""
-    property color  barColor:  "#1f6feb"
+    property color  barColor:  Theme.accent
 
     width:  parent ? parent.width : 240
     height: 26
@@ -25,7 +26,7 @@ Item {
 
         Text {
             text: root.title
-            color: "#e6edf3"
+            color: Theme.text_primary
             font.pixelSize: 20
             font.weight: Font.Bold
             font.family: "Microsoft YaHei UI"

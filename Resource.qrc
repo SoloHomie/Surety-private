@@ -18,14 +18,18 @@
         <file>qml/images/add_icon.svg</file>
         <file>qml/images/arrow-up.svg</file>
         <file>qml/images/call.svg</file>
+        <file>qml/images/delete.svg</file>
         <file>qml/images/cookie.svg</file>
         <file>qml/images/discord.svg</file>
         <file>qml/images/eye-closed.svg</file>
         <file>qml/images/eye-open.svg</file>
         <file>qml/images/github.svg</file>
         <file>qml/images/home_icon.svg</file>
+        <file>qml/js/utils.js</file>
+        <file>qml/js/validation.js</file>
         <file>qml/images/list_icon.svg</file>
         <file>qml/images/market_icon.svg</file>
+        <file>qml/images/market_new.svg</file>
         <file>qml/images/settings_icon.svg</file>
         <file>qml/images/surety-icon.svg</file>
         <file>qml/images/toast-close.svg</file>
@@ -35,6 +39,7 @@
         <file>qml/images/toast-success.svg</file>
         <file>qml/images/toast-warning.svg</file>
         <file>qml/images/vault_icon.svg</file>
+        <file>qml/images/vault_new.svg</file>
         <file>qml/images/window-close.svg</file>
         <file>qml/images/window-maximize.svg</file>
         <file>qml/images/window-minimize.svg</file>
@@ -74,6 +79,7 @@
         <file>qml/pages/settings/SettingsAdvanced.qml</file>
         <file>qml/pages/settings/SettingsAppearance.qml</file>
         <file>qml/pages/settings/SettingsBeta.qml</file>
+        <file>qml/pages/settings/WalletPage.qml</file>
         <file>qml/pages/settings/LoginSuccess.qml</file>
         <file>qml/pages/settings/SettingsGeneral.qml</file>
         <file>qml/pages/settings/SettingsNavBar.qml</file>
@@ -86,15 +92,17 @@
         <file>qml/pages/vault/AssetListDelegate.qml</file>
         <file>qml/pages/vault/AssetListHeader.qml</file>
         <file>qml/pages/vault/AssetListPanel.qml</file>
+        <file>qml/pages/vault/PersonalPage.qml</file>
+        <file>qml/pages/vault/SubscribedPage.qml</file>
+        <file>qml/pages/vault/LocalPage.qml</file>
         <file>qml/pages/vault/ListVaultDelegate.qml</file>
         <file>qml/pages/vault/ManageDrawer.qml</file>
         <file>qml/themes/Theme.qml</file>
         <file>qml/themes/qmldir</file>
-        <file>qml/popups/UpdateContent.qml</file>
-        <file>qml/popups/qmldir</file>
         <file>qml/toast/Toast.qml</file>
         <file>qml/toast/ToastItem.qml</file>
         <file>qml/toast/ToastManager.qml</file>
         <file>qml/toast/qmldir</file>
+        <file>qml/dialogs/UpdateContent.qml</file>
     </qresource>
 </RCC>

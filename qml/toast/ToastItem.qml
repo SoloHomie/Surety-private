@@ -1,4 +1,5 @@
 import QtQuick
+import "../themes"
 import QtQuick.Controls
 
 // ═══════════════════════════════════════════════════════════
@@ -43,11 +44,11 @@ Rectangle {
     //  硬编码预设
     // ═══════════════════════════════════════════════
     readonly property var _map: ({
-        "info":    { bg: "#161b22", bd: "#30363d", svg: "qrc:/qml/images/toast-info.svg" },
-        "success": { bg: "#04260f", bd: "#238636", svg: "qrc:/qml/images/toast-success.svg" },
-        "warning": { bg: "#231a03", bd: "#9e6a03", svg: "qrc:/qml/images/toast-warning.svg" },
-        "danger":  { bg: "#2d050b", bd: "#da3633", svg: "qrc:/qml/images/toast-danger.svg" },
-        "error":   { bg: "#2d050b", bd: "#da3633", svg: "qrc:/qml/images/toast-danger.svg" }
+        "info":    { bg: Theme.bg_card, bd: Theme.border_standard, svg: "qrc:/qml/images/toast-info.svg" },
+        "success": { bg: "#04260f", bd: Theme.success, svg: "qrc:/qml/images/toast-success.svg" },
+        "warning": { bg: "#231a03", bd: Theme.warning, svg: "qrc:/qml/images/toast-warning.svg" },
+        "danger":  { bg: "#2d050b", bd: Theme.danger, svg: "qrc:/qml/images/toast-danger.svg" },
+        "error":   { bg: "#2d050b", bd: Theme.danger, svg: "qrc:/qml/images/toast-danger.svg" }
     })
     readonly property var _m: _map[toastType] || _map["info"]
 
@@ -97,7 +98,7 @@ Rectangle {
         Rectangle {
             visible: root.showCopy
             width: root.closeSize; height: root.closeSize; radius: 4
-            color: copyMA.containsMouse ? "#30363d" : "transparent"
+            color: copyMA.containsMouse ? Theme.border_standard : "transparent"
             Behavior on color { ColorAnimation { duration: 150 } }
             Image {
                 anchors.centerIn: parent
@@ -122,7 +123,7 @@ Rectangle {
         Rectangle {
             visible: root.showClose
             width: root.closeSize; height: root.closeSize; radius: 4
-            color: closeMA.containsMouse ? "#30363d" : "transparent"
+            color: closeMA.containsMouse ? Theme.border_standard : "transparent"
             Behavior on color { ColorAnimation { duration: 150 } }
             Image {
                 anchors.centerIn: parent
@@ -166,7 +167,7 @@ Rectangle {
                 visible: root.title !== ""
                 width: parent.width
                 text: root.title
-                color: "#e6edf3"
+                color: Theme.text_primary
                 font.pixelSize: root.titleSize; font.weight: Font.Bold
                 font.family: "Microsoft YaHei UI"
                 elide: Text.ElideRight; maximumLineCount: 1
@@ -174,13 +175,13 @@ Rectangle {
             Text {
                 width: parent.width
                 text: root.message
-                color: "#8b949e"
+                color: Theme.text_secondary
                 font.pixelSize: root.msgSize
                 font.family: "Microsoft YaHei UI"
                 textFormat: Text.RichText
                 wrapMode: Text.WordWrap
                 lineHeight: 1.5; maximumLineCount: 6
-                linkColor: "#58a6ff"
+                linkColor: Theme.accent_text
                 onLinkActivated: function(link) { Qt.openUrlExternally(link) }
             }
         }

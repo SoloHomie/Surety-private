@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 import QtQuick.Layouts
 
@@ -6,9 +7,9 @@ import QtQuick.Layouts
 Rectangle {
     id: root
     height: 72
-    color: "#0d1117"
+    color: Theme.bg_page
     radius: 10
-    border.color: "#21262d"
+    border.color: Theme.border_default
     border.width: 1
 
     property string currentPage: "general"
@@ -34,8 +35,8 @@ Rectangle {
         spacing: 4
 
         Text {
-            text: "设置"
-            color: "#e6edf3"
+            text: qsTr("设置")
+            color: Theme.text_primary
             font.pixelSize: 28
             font.weight: Font.Bold
             font.family: "Microsoft YaHei UI"
@@ -48,13 +49,14 @@ Rectangle {
                 ListElement { label: "外观"; page: "appearance" }
                 ListElement { label: "高级"; page: "advanced"   }
                 ListElement { label: "关于"; page: "about"      }
+                ListElement { label: "钱包";  page: "wallet"    }
                 ListElement { label: "Beta";  page: "beta"      }
             }
 
             Rectangle {
                 id: navItem
-                width: navLabel.implicitWidth + 36
-                height: 44
+                Layout.preferredWidth: navLabel.implicitWidth + 36
+                Layout.preferredHeight: 44
                 radius: 10
                 Layout.alignment: Qt.AlignVCenter
 
@@ -62,8 +64,8 @@ Rectangle {
                 readonly property bool _hov: navMouse.containsMouse
 
                 color: {
-                    if (_sel) return "#1f6feb"
-                    if (_hov) return "#161b22"
+                    if (_sel) return Theme.accent
+                    if (_hov) return Theme.bg_card
                     return "transparent"
                 }
 
@@ -82,7 +84,7 @@ Rectangle {
                     width: _sel ? 24 : 0
                     height: 3
                     radius: 2
-                    color: _sel ? "#ffffff" : "transparent"
+                    color: _sel ? Theme.text_bright : "transparent"
 
                     Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutBack } }
                     Behavior on color { ColorAnimation { duration: 150 } }
@@ -91,11 +93,11 @@ Rectangle {
                 Text {
                     id: navLabel
                     anchors.centerIn: parent
-                    text: model.label
+                    text: qsTr(model.label)
                     color: {
-                        if (_sel) return "#ffffff"
-                        if (_hov) return "#c9d1d9"
-                        return "#8b949e"
+                        if (_sel) return Theme.text_bright
+                        if (_hov) return Theme.text_primary
+                        return Theme.text_secondary
                     }
                     font.pixelSize: 18
                     font.weight: _sel ? Font.Bold : Font.Normal

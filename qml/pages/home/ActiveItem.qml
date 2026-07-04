@@ -1,4 +1,5 @@
 import QtQuick
+import "../../themes"
 import QtQuick.Controls
 
 //=============================================================================
@@ -14,7 +15,7 @@ Item {
     property bool   showUpperLine:  true
     property bool   showLowerLine:  true
 
-    property string color:          "#238636"
+    property string color:          Theme.success
     property string title:          ""
     property string time:           ""
     property string message:        ""
@@ -41,7 +42,7 @@ Item {
         y: 0
         width: root._barW
         height: nodeDot.y
-        color: "#30363d"
+        color: Theme.border_standard
         visible: root.showUpperLine
     }
 
@@ -51,7 +52,7 @@ Item {
         y: nodeDot.y + nodeDot.height
         width: root._barW
         height: root.implicitHeight - (nodeDot.y + nodeDot.height)
-        color: "#30363d"
+        color: Theme.border_standard
         visible: root.showLowerLine
     }
 
@@ -65,7 +66,7 @@ Item {
         radius: root._dotR
         color: expanded ? Qt.darker(root.color, 1.4) : root.color
         border.width: 2
-        border.color: "#0d1117"
+        border.color: Theme.bg_page
         z: 2
 
         Behavior on color {
@@ -79,7 +80,7 @@ Item {
         y: nodeDot.y + nodeDot.height / 2 - 1
         width: unifiedCard.x - x
         height: 2
-        color: root.expanded ? root.color : "#30363d"
+        color: root.expanded ? root.color : Theme.border_standard
 
         Behavior on color {
             ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
@@ -104,7 +105,7 @@ Item {
             anchors.top: parent.top
             height: root._headerH
 
-            color: (!root.expanded && headerMouse.containsMouse) ? "#21262d" : "#161b22"
+            color: (!root.expanded && headerMouse.containsMouse) ? Theme.border_default : Theme.bg_card
             radius: 8
 
             // 展开时底部圆角变直角，与详情无缝衔接
@@ -112,7 +113,7 @@ Item {
             bottomRightRadius: detailBody.height > 0 ? 0 : 8
 
             border.width: 1
-            border.color: root.expanded ? "#30363d" : "#21262d"
+            border.color: root.expanded ? Theme.border_standard : Theme.border_default
 
             Behavior on color {
                 ColorAnimation { duration: 150; easing.type: Easing.OutCubic }
@@ -157,7 +158,7 @@ Item {
                     Text {
                         width: parent.width
                         text: root.title || "Untitled"
-                        color: "#e6edf3"
+                        color: Theme.text_primary
                         font.pixelSize: 17
                         font.family: "Microsoft YaHei UI"
                         font.weight: Font.DemiBold
@@ -168,7 +169,7 @@ Item {
                     // 时间
                     Text {
                         text: root.time || ""
-                        color: "#6e7681"
+                        color: Theme.text_hint
                         font.pixelSize: 13
                         font.family: "JetBrains Mono"
                         elide: Text.ElideRight
@@ -240,8 +241,8 @@ Item {
             bottomLeftRadius: 8
             bottomRightRadius: 8
             border.width: 1
-            border.color: "#30363d"
-            color: "#0d1117"
+            border.color: Theme.border_standard
+            color: Theme.bg_page
 
             message: root.message
         }
