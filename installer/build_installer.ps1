@@ -17,8 +17,9 @@ $MetaDir = "$Root\installer\packages\com.surety.app\meta"
 $ConfigDir = "$Root\installer\config"
 $Output = "$Root\installer\Surety-$Version-win64.exe"
 
-Write-Host "=== 1. 编译 Release ===" -ForegroundColor Cyan
-& "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" "$Root\Surety.vcxproj" /p:Configuration=Release /p:Platform=x64 /m
+Write-Host "=== 1. 请先在 VS2026 中手动编译 Release x64 ===" -ForegroundColor Yellow
+Write-Host "    按任意键继续..." -ForegroundColor Yellow
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 
 Write-Host "=== 2. 更新版本号 ===" -ForegroundColor Cyan
 $pkgXml = "$MetaDir\package.xml"
