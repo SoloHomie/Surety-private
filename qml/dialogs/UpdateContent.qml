@@ -9,7 +9,7 @@ Rectangle {
     signal dismissClicked()
 
     property string currentVer: "1.0.0"
-    property string latestVer: "1.1.0"
+    property string latestVer: "1.0.0"
     property string releaseNotes: ""
     property string githubUrl: "https://github.com/SoloHomie/Surety/releases/latest"
     property string mirrorUrl: "https://ghproxy.com/https://github.com/SoloHomie/Surety/releases/latest"
