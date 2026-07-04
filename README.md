@@ -1,95 +1,49 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/SoloHomie/Surety/main/qml/images/surety-icon.svg" width="96" height="96" alt="Surety" />
   <h1>Surety</h1>
-  <p><strong>下一代数字资产管理与交易平台</strong></p>
+  <p><strong>数字资产一站式管理 · 自由创作 · 轻松交易</strong></p>
 
-  [![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)]()
-  [![Platform](https://img.shields.io/badge/platform-Windows%2010%2B-0078D6?style=flat-square)]()
-  [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+  [![Platform](https://img.shields.io/badge/Windows-10%2B-blue?logo=windows&style=flat-square)]()
+  [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen?style=flat-square)]()
 </div>
 
 ---
 
-## ✨ 功能特性
+## ✨ 功能一览
 
 <table>
   <tr>
-    <td width="50%">
-      <h4>🔐 OAuth 第三方登录</h4>
-      <p>支持 GitHub / Discord OAuth 2.0 一键登录，本地 TCP 回调服务器安全可靠，无需额外注册。</p>
-    </td>
-    <td width="50%">
-      <h4>📦 资产管理</h4>
-      <p>创建、编辑、删除数字资产，支持分类标签、版本管理、自定义属性 JSON。</p>
-    </td>
+    <td><h4>🔐 一键登录</h4>GitHub / Discord 账号直接登录，免去注册烦恼</td>
+    <td><h4>📦 资产管理</h4>创建和组织你的数字作品，支持分类、版本和自定义标签</td>
   </tr>
   <tr>
-    <td>
-      <h4>🏪 市场浏览</h4>
-      <p>全文搜索、热榜排行、类型过滤、分页浏览。上架/下架一键操作，实时同步。</p>
-    </td>
-    <td>
-      <h4>💳 订阅与定价</h4>
-      <p>一次性买断 + 按天订阅双模型，Surety 虚拟货币结算，交易记录可追溯。</p>
-    </td>
+    <td><h4>🏪 市场交易</h4>上架资产、搜索发现、热门排行，买卖仅需一键</td>
+    <td><h4>💳 灵活定价</h4>买断 + 订阅双模式，自由设定价格和时长</td>
   </tr>
   <tr>
-    <td>
-      <h4>🎁 新人福利</h4>
-      <p>注册即领 200 Surety，福利系统可扩展，运营活动灵活配置。</p>
-    </td>
-    <td>
-      <h4>🔄 自动更新</h4>
-      <p>启动时静默检查版本，一键下载安装。强制更新保障安全修复及时触达。</p>
-    </td>
+    <td><h4>🎁 新人福利</h4>注册即送 200 代币，即刻体验交易乐趣</td>
+    <td><h4>🔄 自动更新</h4>后台静默检测，有新版一键升级，无需操心</td>
   </tr>
   <tr>
-    <td>
-      <h4>🌗 深色主题</h4>
-      <p>精心打磨的暗色 UI，匹配 Windows 11 设计语言，长时间使用不疲劳。</p>
-    </td>
-    <td>
-      <h4>⚡ 本地加密</h4>
-      <p>Windows DPAPI 硬件绑定加密，Token 与资产文件即使被拷贝也无法解密。</p>
-    </td>
+    <td><h4>🌙 深色界面</h4>精心打磨的暗色主题，护眼舒适</td>
+    <td><h4>🔒 本地加密</h4>你的数据只有你能访问，换个电脑也打不开</td>
   </tr>
 </table>
 
 ---
 
-## 🚀 快速开始
+## 🚀 立即下载
 
-| 方式 | 链接 |
-|------|------|
-| **服务器下载**（国内推荐） | [api.solohomie.top/api/download](https://api.solohomie.top/api/download) |
-| **GitHub Release** | [Releases](https://github.com/SoloHomie/Surety/releases) |
+| 下载方式 | 链接 | 说明 |
+|---------|------|------|
+| 国内加速 | **[服务器直连](https://api.solohomie.top/api/download)** | 推荐，速度快 |
+| GitHub | [Releases 页面](https://github.com/SoloHomie/Surety/releases) | 备用 |
 
-- 支持 Windows 10 1809+ / Windows 11
-- 首次启动自动创建数据目录，无需管理员权限
-
----
-
-## 🛠 技术栈
-
-| 层 | 技术 |
-|------|------|
-| 客户端 | Qt 6 / QML / C++20 / OpenSSL |
-| 服务端 | C++20 / MySQL / Redis / libcurl |
-| 安全 | PBKDF2-SHA256 (60 万轮) / DPAPI / TLS 1.3 |
-| 部署 | Caddy / Systemd / Inno Setup |
-
----
-
-## 📦 安装
-
-下载安装包运行，或使用包管理器（即将支持）：
-
-```powershell
-winget install SoloHomie.Surety  # 即将上线
-```
+- Windows 10 及以上系统
+- 下载后双击安装，无需管理员权限
 
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by Homie</sub>
+  <sub>© 2026 Homie. All rights reserved.</sub>
 </div>
