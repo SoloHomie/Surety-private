@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="qml/images/surety-icon.svg" width="96" height="96" alt="Surety" />
+  <img src="https://raw.githubusercontent.com/SoloHomie/Surety/main/qml/images/surety-icon.svg" width="96" height="96" alt="Surety" />
   <h1>Surety</h1>
   <p><strong>下一代数字资产管理与交易平台</strong></p>
 
