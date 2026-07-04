@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FD4ED08E-CAD6-4DEA-8AD1-F05CD99331D6}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v145</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtInstall>6.11.1_msvc2022_64</QtInstall>
+    <QtModules>core;network;qml;quick;quicklayouts;widgets</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+    <QtQMLDebugEnable>true</QtQMLDebugEnable>
+    <QtPlugin>false</QtPlugin>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>6.11.1_msvc2022_64</QtInstall>
+    <QtModules>core;network;qml;quick;quicklayouts;widgets</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\network\ApiClient.cpp" />
+    <ClCompile Include="src\services\auth\AuthService.cpp" />
+    <ClCompile Include="src\services\asset\AssetService.cpp" />
+    <ClCompile Include="src\services\auth\OAuthServer.cpp" />
+    <ClCompile Include="src\services\system\UserSettings.cpp" />
+    <ClCompile Include="src\services\asset\AssetWatcher.cpp" />
+    <ClCompile Include="src\services\system\SystemTray.cpp" />
+    <ClCompile Include="src\services\system\FileHelper.cpp" />
+    <ClCompile Include="src\services\system\MigrationWorker.cpp" />
+    <ClCompile Include="src\services\wallet\CryptoHelper.cpp" />
+    <ClCompile Include="src\services\wallet\SubscriptionStore.cpp" />
+    <ClCompile Include="src\services\system\LanguageManager.cpp" />
+    <ClCompile Include="src\services\system\UpdateService.cpp" />
+    <ResourceCompile Include="src\resource.rc" />
+    <ClCompile Include="src\model\AssetListModel.cpp" />
+    <ClCompile Include="src\model\MarketListModel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="qml\App.qml" />
+    <None Include="qml\animations\AnimPresets.qml" />
+    <None Include="qml\baseComponents\Avatar.qml" />
+    <None Include="qml\baseComponents\PasswordField.qml" />
+    <None Include="qml\baseComponents\ScrollPage.qml" />
+    <None Include="qml\baseComponents\SectionHeader.qml" />
+    <None Include="qml\baseComponents\SendCodeButton.qml" />
+    <None Include="qml\baseComponents\SuretyBtn.qml" />
+    <None Include="qml\baseComponents\SuretyScrollBar.qml" />
+    <None Include="qml\baseComponents\SuretySwitch.qml" />
+    <None Include="qml\baseComponents\SuretyTagSelector.qml" />
+    <None Include="qml\baseComponents\SuretyTextArea.qml" />
+    <None Include="qml\baseComponents\SuretyTextField.qml" />
+    <None Include="qml\baseComponents\Tooltip.qml" />
+    <None Include="qml\images\add_icon.svg" />
+    <None Include="qml\images\arrow-up.svg" />
+    <None Include="qml\images\call.svg" />
+    <None Include="qml\images\cookie.svg" />
+    <None Include="qml\images\discord.svg" />
+    <None Include="qml\images\eye-closed.svg" />
+    <None Include="qml\images\eye-open.svg" />
+    <None Include="qml\images\github.svg" />
+    <None Include="qml\images\home_icon.svg" />
+    <None Include="qml\images\list_icon.svg" />
+    <None Include="qml\images\market_icon.svg" />
+    <None Include="qml\images\market_new.svg" />
+    <None Include="qml\images\QQ.svg" />
+    <None Include="qml\images\settings_icon.svg" />
+    <None Include="qml\images\surety-icon.svg" />
+    <None Include="qml\images\toast-close.svg" />
+    <None Include="qml\images\toast-copy.svg" />
+    <None Include="qml\images\toast-danger.svg" />
+    <None Include="qml\images\toast-info.svg" />
+    <None Include="qml\images\toast-success.svg" />
+    <None Include="qml\images\toast-warning.svg" />
+    <None Include="qml\images\vault_icon.svg" />
+    <None Include="qml\images\vault_new.svg" />
+    <None Include="qml\images\window-close.svg" />
+    <None Include="qml\images\window-maximize.svg" />
+    <None Include="qml\images\window-minimize.svg" />
+    <None Include="qml\images\window-restore.svg" />
+    <None Include="qml\images\微信.svg" />
+    <None Include="qml\images\搜索.svg" />
+    <None Include="qml\images\调用.svg" />
+    <None Include="qml\images\礼物.svg" />
+    <None Include="qml\images\窗体-关闭.svg" />
+    <None Include="qml\images\窗体-向下还原.svg" />
+    <None Include="qml\images\窗体-最大化.svg" />
+    <None Include="qml\images\窗体-最小化.svg" />
+    <None Include="qml\images\组管理.svg" />
+    <None Include="qml\images\设置.svg" />
+    <None Include="qml\images\资产.svg" />
+    <None Include="qml\layout\DisplayRect.qml" />
+    <None Include="qml\layout\SideBar.qml" />
+    <None Include="qml\layout\SideBarDelegate.qml" />
+    <None Include="qml\pages\HomePage.qml" />
+    <None Include="qml\pages\MarketPage.qml" />
+    <None Include="qml\pages\SettingsPage.qml" />
+    <None Include="qml\pages\settings\auth\LinkedAccounts.qml" />
+    <None Include="qml\pages\VaultPage.qml" />
+    <None Include="qml\pages\home\ActiveItem.qml" />
+    <None Include="qml\pages\home\ActiveItemDetail.qml" />
+    <None Include="qml\pages\home\HeatRanking.qml" />
+    <None Include="qml\pages\home\PreviewCards.qml" />
+    <None Include="qml\pages\home\QuickActionsCard.qml" />
+    <None Include="qml\pages\home\QuickActionsDelegate.qml" />
+    <None Include="qml\pages\home\RankingDelegate.qml" />
+    <None Include="qml\pages\home\StatCard.qml" />
+    <None Include="qml\pages\home\TimelineList.qml" />
+    <None Include="qml\pages\market\MarketDetailContent.qml" />
+    <None Include="qml\pages\market\MarketDetailPopup.qml" />
+    <None Include="qml\pages\market\MarketItemDelegate.qml" />
+    <None Include="qml\pages\market\SearchBar.qml" />
+    <None Include="qml\pages\settings\SettingsAbout.qml" />
+    <None Include="qml\pages\settings\SettingsAdvanced.qml" />
+    <None Include="qml\pages\settings\SettingsAppearance.qml" />
+    <None Include="qml\pages\settings\SettingsBeta.qml" />
+    <None Include="qml\pages\settings\WalletPage.qml" />
+    <None Include="qml\pages\settings\LoginSuccess.qml" />
+    <None Include="qml\pages\settings\SettingsGeneral.qml" />
+    <None Include="qml\pages\settings\SettingsNavBar.qml" />
+    <None Include="qml\pages\settings\auth\LoginForm.qml" />
+    <None Include="qml\pages\settings\auth\RegisterForm.qml" />
+    <None Include="qml\pages\settings\auth\ResetPasswordForm.qml" />
+    <None Include="qml\pages\settings\auth\ThirdPartyLogin.qml" />
+    <None Include="qml\pages\vault\AssetDetailPanel.qml" />
+    <None Include="qml\pages\vault\AssetListDelegate.qml" />
+    <None Include="qml\pages\vault\AssetListHeader.qml" />
+    <None Include="qml\pages\vault\AssetListPanel.qml" />
+    <None Include="qml\pages\vault\PersonalPage.qml" />
+    <None Include="qml\pages\vault\SubscribedPage.qml" />
+    <None Include="qml\pages\vault\LocalPage.qml" />
+    <None Include="qml\pages\vault\ListVaultDelegate.qml" />
+    <None Include="qml\pages\vault\ManageDrawer.qml" />
+    <None Include="qml\dialogs\UpdateContent.qml" />
+    <None Include="qml\themes\Theme.qml" />
+    <None Include="qml\toast\qmldir" />
+    <None Include="qml\toast\Toast.qml" />
+    <None Include="qml\toast\ToastItem.qml" />
+    <None Include="qml\toast\ToastManager.qml" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\network\ApiClient.h" />
+    <QtMoc Include="src\services\auth\AuthService.h" />
+    <QtMoc Include="src\services\asset\AssetService.h" />
+    <QtMoc Include="src\services\auth\OAuthServer.h" />
+    <QtMoc Include="src\services\system\UserSettings.h" />
+    <QtMoc Include="src\services\asset\AssetWatcher.h" />
+    <QtMoc Include="src\services\system\SystemTray.h" />
+    <QtMoc Include="src\services\system\FileHelper.h" />
+    <QtMoc Include="src\services\system\MigrationWorker.h" />
+    <QtMoc Include="src\services\wallet\CryptoHelper.h" />
+    <QtMoc Include="src\services\wallet\SubscriptionStore.h" />
+    <QtMoc Include="src\services\system\LanguageManager.h" />
+    <QtMoc Include="src\model\AssetListModel.h" />
+    <QtMoc Include="src\model\MarketListModel.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
